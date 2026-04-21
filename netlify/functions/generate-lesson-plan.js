@@ -54,8 +54,12 @@ exports.handler = async (event) => {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5-20250929',
-        max_tokens: 2500,
+        // Use Haiku for speed — Netlify sync functions timeout at 10s on free plan.
+        // Haiku responds in 2-5s; Sonnet takes 15-20s which exceeds the timeout.
+        // Quality is still strong for lesson planning; we can A/B test Sonnet later
+        // if we upgrade to Netlify Pro (26s timeout) or move to background functions.
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 2000,
         temperature: 0.7,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
