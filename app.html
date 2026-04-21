@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson Plan Generator — LessonForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js" defer></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand-mark" style="color: inherit; text-decoration: none;">
+      <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
+        <defs><linearGradient id="e1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#d84315"/></linearGradient></defs>
+        <rect x="10" y="44" width="44" height="8" rx="1.5" fill="#1a1f36"/>
+        <rect x="16" y="36" width="32" height="8" rx="1" fill="#1a1f36"/>
+        <path d="M 48 36 L 56 32 L 56 40 L 48 44 Z" fill="#1a1f36"/>
+        <path d="M 18 28 L 46 28 L 46 36 L 18 36 Z" fill="#3a3f51"/>
+        <path d="M 32 28 L 32 36" stroke="#1a1f36" stroke-width="1"/>
+        <path d="M 32 22 Q 28 16, 32 8 Q 36 16, 32 22 Z" fill="url(#e1)"/>
+        <circle cx="38" cy="14" r="2" fill="#f97316" opacity="0.6"/>
+        <circle cx="26" cy="18" r="1.5" fill="#f97316" opacity="0.5"/>
+      </svg>
+      <span>LessonForge</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#pricing">Pricing</a>
+      <span style="color: var(--mist); font-size: 13px;" id="usage-label">—</span>
+    </div>
+  </div>
+</nav>
+
+<div class="app">
+
+  <!-- FORM -->
+  <aside class="app-form">
+    <h1>🔨 Forge a lesson plan</h1>
+    <p class="subtitle">Fill in what you know. We'll fill in the rest.</p>
+
+    <form id="plan-form">
+
+      <div class="field">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="e.g. Business, Maths, English, Psychology" required>
+        <div class="hint">Any subject — we support Primary to University</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="level">Level</label>
+          <select id="level" name="level" required>
+            <optgroup label="Primary (UK)">
+              <option>Year 1 (KS1)</option>
+              <option>Year 2 (KS1)</option>
+              <option>Year 3 (KS2)</option>
+              <option>Year 4 (KS2)</option>
+              <option>Year 5 (KS2)</option>
+              <option>Year 6 (KS2)</option>
+            </optgroup>
+            <optgroup label="Secondary (UK)">
+              <option>Year 7 (KS3)</option>
+              <option>Year 8 (KS3)</option>
+              <option>Year 9 (KS3)</option>
+              <option>Year 10 (GCSE)</option>
+              <option>Year 11 (GCSE)</option>
+              <option selected>Year 12 (A-Level/BTEC)</option>
+              <option>Year 13 (A-Level/BTEC)</option>
+            </optgroup>
+            <optgroup label="Secondary (AU)">
+              <option>Year 7 (AU)</option>
+              <option>Year 8 (AU)</option>
+              <option>Year 9 (AU)</option>
+              <option>Year 10 (AU)</option>
+              <option>Year 11 (HSC/VCE)</option>
+              <option>Year 12 (HSC/VCE)</option>
+            </optgroup>
+            <optgroup label="University">
+              <option>Foundation / Access</option>
+              <option>Undergraduate Y1</option>
+              <option>Undergraduate Y2</option>
+              <option>Undergraduate Y3</option>
+              <option>Postgraduate / Masters</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="duration">Duration</label>
+          <select id="duration" name="duration" required>
+            <option>30 min</option>
+            <option>45 min</option>
+            <option selected>60 min</option>
+            <option>90 min</option>
+            <option>2 hours</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="topic">Topic / learning focus</label>
+        <textarea id="topic" name="topic" placeholder="e.g. Pricing strategies and elasticity · Or: Photosynthesis · Or: Quadratic equations" required></textarea>
+      </div>
+
+      <div class="field">
+        <label for="exam-board">Exam board / curriculum (optional)</label>
+        <select id="exam-board" name="examBoard">
+          <option value="">— Not specified —</option>
+          <option>AQA</option>
+          <option>Pearson Edexcel</option>
+          <option>OCR</option>
+          <option>WJEC</option>
+          <option>CCEA</option>
+          <option>Scottish CfE</option>
+          <option>ACARA (AU national)</option>
+          <option>NSW Syllabus (HSC)</option>
+          <option>VIC VCE</option>
+          <option>IB MYP / DP</option>
+          <option>IGCSE / Cambridge</option>
+          <option>Other</option>
+        </select>
+        <div class="hint">Helps us align to the right spec</div>
+      </div>
+
+      <div class="field">
+        <label for="class-notes">Class context (optional)</label>
+        <textarea id="class-notes" name="classNotes" placeholder="e.g. 28 students · 3 SEN (dyslexia) · 2 EAL · Mixed ability"></textarea>
+        <div class="hint">The plan will include differentiation for this</div>
+      </div>
+
+      <button type="submit" class="generate-btn" id="generate-btn">
+        ⚒️ Forge my lesson plan
+      </button>
+
+      <p style="font-size: 12px; color: var(--mist); margin-top: 14px; text-align: center;">
+        Takes 20–30 seconds. We're using Claude (by Anthropic) to forge the plan.
+      </p>
+    </form>
+  </aside>
+
+  <!-- OUTPUT -->
+  <main class="output" id="output">
+    <div class="output-empty" id="empty-state">
+      <div class="anvil">⚒️</div>
+      <h2>Your lesson plan will appear here</h2>
+      <p>Fill in the form and press <strong>Forge</strong>.</p>
+    </div>
+  </main>
+
+</div>
+
+<script>
+// ============================================================
+// LessonForge — Lesson Plan Generator (client)
+// ============================================================
+
+const USAGE_KEY = 'lessonforge-usage-v1';
+
+function getUsage() {
+  const stored = localStorage.getItem(USAGE_KEY);
+  const month = new Date().toISOString().slice(0, 7); // YYYY-MM
+  if (!stored) return { month, count: 0 };
+  const parsed = JSON.parse(stored);
+  if (parsed.month !== month) return { month, count: 0 };
+  return parsed;
+}
+
+function bumpUsage() {
+  const u = getUsage();
+  u.count++;
+  localStorage.setItem(USAGE_KEY, JSON.stringify(u));
+  renderUsage();
+  return u;
+}
+
+function renderUsage() {
+  const u = getUsage();
+  const remaining = Math.max(0, 5 - u.count);
+  document.getElementById('usage-label').textContent =
+    remaining + ' of 5 free this month';
+}
+
+renderUsage();
+
+// ==========================================================
+// Form submission
+// ==========================================================
+
+const form = document.getElementById('plan-form');
+const output = document.getElementById('output');
+const generateBtn = document.getElementById('generate-btn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const u = getUsage();
+  if (u.count >= 5) {
+    output.innerHTML = `
+      <div class="output-empty">
+        <div class="anvil">🔒</div>
+        <h2>Free limit reached</h2>
+        <p style="max-width: 360px; margin-top: 12px;">You've used all 5 free lesson plans this month. Upgrade to Pro for £9/month (unlimited) — or wait until next month.</p>
+        <div style="margin-top: 20px;">
+          <a href="index.html#pricing" class="btn btn-primary">See Pro pricing</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const data = Object.fromEntries(new FormData(form));
+  generateBtn.disabled = true;
+  generateBtn.textContent = '⚒️ Forging...';
+
+  output.innerHTML = `
+    <div class="output-loading">
+      <div class="forge-animation">⚒️</div>
+      <h2 style="font-family: var(--font-display); font-size: 22px;">Hammering it out...</h2>
+      <p style="color: var(--mist); margin-top: 8px;">This takes 20–30 seconds.</p>
+    </div>`;
+
+  try {
+    const res = await fetch('/.netlify/functions/generate-lesson-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText || `HTTP ${res.status}`);
+    }
+
+    const result = await res.json();
+    renderPlan(result, data);
+    bumpUsage();
+
+  } catch (err) {
+    output.innerHTML = `
+      <div class="output-empty">
+        <div class="anvil">⚠️</div>
+        <h2>Something went wrong</h2>
+        <div class="error" style="margin-top: 16px; max-width: 500px;">
+          ${err.message || 'Unknown error. Check console for details.'}
+        </div>
+        <p style="color: var(--mist); margin-top: 16px; font-size: 13px;">
+          If this persists, email hello@lessonforge.uk with the error above.
+        </p>
+      </div>`;
+    console.error(err);
+  } finally {
+    generateBtn.disabled = false;
+    generateBtn.textContent = '⚒️ Forge my lesson plan';
+  }
+});
+
+// ==========================================================
+// Render the plan
+// ==========================================================
+
+function renderPlan(result, input) {
+  const plan = result.plan || result; // backend returns {plan: "..."}
+
+  // Header with meta chips
+  const chips = [
+    input.subject,
+    input.level,
+    input.duration,
+    input.examBoard || null,
+  ].filter(Boolean);
+
+  const chipsHtml = chips.map(c => `<span class="meta-chip">${escapeHtml(c)}</span>`).join('');
+
+  // Use marked to render markdown
+  const planHtml = window.marked ? window.marked.parse(plan) : plan;
+
+  output.innerHTML = `
+    <div class="lesson-plan">
+      <h1>${escapeHtml(input.topic || 'Lesson Plan')}</h1>
+      <div class="meta">${chipsHtml}</div>
+      ${planHtml}
+    </div>
+    <div class="output-actions">
+      <button class="btn btn-ghost" onclick="copyPlan()">📋 Copy</button>
+      <button class="btn btn-ghost" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn btn-primary" onclick="forgeAnother()">⚒️ Forge another</button>
+    </div>
+  `;
+}
+
+function copyPlan() {
+  const el = document.querySelector('.lesson-plan');
+  if (!el) return;
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Copied to clipboard!');
+  });
+}
+
+function forgeAnother() {
+  output.innerHTML = `
+    <div class="output-empty">
+      <div class="anvil">⚒️</div>
+      <h2>Ready for the next one</h2>
+      <p>Edit the form and press <strong>Forge</strong>.</p>
+    </div>`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+// Expose for inline handlers
+window.copyPlan = copyPlan;
+window.forgeAnother = forgeAnother;
+</script>
+
+</body>
+</html>

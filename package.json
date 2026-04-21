@@ -1,0 +1,13 @@
+{
+  "name": "lessonforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LessonForge — AI lesson planning tools for UK & AU teachers. A product of TBS Education Ltd Oy.",
+  "scripts": {
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --prod"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
