@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report Card Comments — LessonForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Page-specific styles */
+  .reports-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .page-head {
+    margin-bottom: 32px;
+  }
+  .page-head h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .page-head p {
+    color: var(--mist);
+    font-size: 16px;
+    max-width: 680px;
+  }
+
+  .mode-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--steel);
+    margin-bottom: 24px;
+  }
+  .mode-tab {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--mist);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: inherit;
+  }
+  .mode-tab.active {
+    color: var(--ember);
+    border-bottom-color: var(--ember);
+  }
+
+  .mode-panel { display: none; }
+  .mode-panel.active { display: block; }
+
+  .common-fields {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 820px) {
+    .common-fields { grid-template-columns: 1fr 1fr; }
+  }
+  .common-fields .field { margin: 0; }
+
+  /* SINGLE MODE */
+  .single-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 900px) {
+    .single-layout { grid-template-columns: 1fr; }
+  }
+
+  .single-form {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+  }
+  .single-form h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .single-form .sub {
+    color: var(--mist);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .single-output {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    min-height: 400px;
+  }
+
+  .comment-card {
+    background: var(--paper);
+    border-left: 3px solid var(--ember);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 16px;
+  }
+  .comment-card.warm {
+    border-left-color: #f59e0b;
+  }
+  .comment-card.encouraging {
+    border-left-color: var(--forged);
+  }
+  .comment-card .tone {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 8px;
+  }
+  .comment-card.warm .tone { color: #b45309; }
+  .comment-card.encouraging .tone { color: var(--forged); }
+  .comment-card .body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+  }
+  .comment-card .actions {
+    display: flex;
+    gap: 8px;
+  }
+  .comment-card button {
+    background: white;
+    border: 1px solid var(--steel);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--anvil);
+    font-family: inherit;
+  }
+  .comment-card button:hover {
+    border-color: var(--ember);
+    color: var(--ember);
+  }
+
+  .empty-hint {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mist);
+  }
+  .empty-hint .em {
+    font-size: 42px;
+    margin-bottom: 14px;
+    opacity: 0.5;
+  }
+  .empty-hint h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--anvil);
+    margin-bottom: 6px;
+  }
+
+  /* BULK MODE */
+  .bulk-intro {
+    background: #fff8e8;
+    border: 1px solid #fbbf24;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    color: #78350f;
+  }
+
+  .bulk-input {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .bulk-input textarea {
+    width: 100%;
+    min-height: 180px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    padding: 12px;
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    background: var(--paper);
+    resize: vertical;
+  }
+
+  .bulk-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--steel);
+    border-radius: 3px;
+    overflow: hidden;
+    display: none;
+  }
+  .progress-bar.active { display: block; }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ember), #f97316);
+    transition: width 0.3s;
+  }
+
+  .bulk-results {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .bulk-results-header {
+    background: var(--paper);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--steel);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .bulk-results-header h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+  }
+
+  .bulk-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .bulk-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--steel);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--anvil);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .bulk-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--steel);
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .bulk-table td.name {
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .bulk-table td.comment {
+    color: var(--ink);
+  }
+  .bulk-table tr:last-child td { border-bottom: none; }
+  .bulk-table .pending { color: var(--mist); font-style: italic; }
+  .bulk-table .failed { color: var(--ember); font-style: italic; }
+
+  .tone-switch {
+    display: flex;
+    gap: 4px;
+    background: var(--paper);
+    padding: 4px;
+    border-radius: 7px;
+    border: 1px solid var(--steel);
+  }
+  .tone-switch button {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--anvil);
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: inherit;
+  }
+  .tone-switch button.active {
+    background: white;
+    color: var(--ember);
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  }
+
+  .status-banner {
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .status-banner.info { background: #e0f2fe; border: 1px solid #7dd3fc; color: #075985; }
+  .status-banner.error { background: #fee2e2; border: 1px solid #fecaca; color: #991b1b; }
+  .status-banner.success { background: #d1fae5; border: 1px solid #86efac; color: #065f46; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand-mark" style="color: inherit; text-decoration: none;">
+      <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
+        <defs><linearGradient id="e1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#d84315"/></linearGradient></defs>
+        <rect x="10" y="44" width="44" height="8" rx="1.5" fill="#1a1f36"/>
+        <rect x="16" y="36" width="32" height="8" rx="1" fill="#1a1f36"/>
+        <path d="M 48 36 L 56 32 L 56 40 L 48 44 Z" fill="#1a1f36"/>
+        <path d="M 18 28 L 46 28 L 46 36 L 18 36 Z" fill="#3a3f51"/>
+        <path d="M 32 28 L 32 36" stroke="#1a1f36" stroke-width="1"/>
+        <path d="M 32 22 Q 28 16, 32 8 Q 36 16, 32 22 Z" fill="url(#e1)"/>
+        <circle cx="38" cy="14" r="2" fill="#f97316" opacity="0.6"/>
+        <circle cx="26" cy="18" r="1.5" fill="#f97316" opacity="0.5"/>
+      </svg>
+      <span>LessonForge</span>
+    </a>
+    <div class="nav-links">
+      <a href="app.html">Lesson plan</a>
+      <a href="index.html#pricing">Pricing</a>
+      <span style="color: var(--mist); font-size: 13px;" id="usage-label">—</span>
+    </div>
+  </div>
+</nav>
+
+<div class="reports-layout">
+
+  <div class="page-head">
+    <h1>📝 Report Card Comments</h1>
+    <p>Paste your notes, get three tonal variants for each student. 30 students in ~15 seconds. You review, edit, export.</p>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('single')">👤 Single student</button>
+    <button class="mode-tab" onclick="setMode('bulk')">👥 Bulk (up to 30)</button>
+  </div>
+
+  <!-- Common fields shared by both modes -->
+  <div class="common-fields">
+    <div class="field">
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" placeholder="e.g. A-Level Business" value="">
+    </div>
+    <div class="field">
+      <label for="level">Level</label>
+      <input type="text" id="level" placeholder="e.g. Year 12" value="">
+    </div>
+    <div class="field">
+      <label for="period">Reporting period</label>
+      <input type="text" id="period" placeholder="e.g. Autumn 2026" value="">
+    </div>
+    <div class="field">
+      <label for="style-hint">School style (optional)</label>
+      <input type="text" id="style-hint" placeholder="e.g. brief, detailed" value="">
+    </div>
+  </div>
+
+  <!-- SINGLE MODE -->
+  <div class="mode-panel active" id="panel-single">
+    <div class="single-layout">
+      <aside class="single-form">
+        <h2>Student</h2>
+        <p class="sub">Fill in the notes — we'll give you 3 tonal variants.</p>
+
+        <form id="single-form">
+          <div class="field">
+            <label for="s-name">Student name</label>
+            <input type="text" id="s-name" placeholder="e.g. Sarah Thompson" required>
+          </div>
+
+          <div class="field">
+            <label for="s-grade">Grade (optional)</label>
+            <input type="text" id="s-grade" placeholder="e.g. B / A* / 7">
+          </div>
+
+          <div class="field">
+            <label for="s-notes">Your notes on this student</label>
+            <textarea id="s-notes" rows="6" placeholder="e.g. Excellent on essays, weak on timed exams, helpful in group work. Consistent homework, strong verbal reasoning." required></textarea>
+            <div class="hint">Keywords, strengths, weaknesses, attitude, areas for improvement</div>
+          </div>
+
+          <button type="submit" class="generate-btn" id="single-btn">
+            ⚒️ Generate 3 comments
+          </button>
+          <p style="font-size: 12px; color: var(--mist); margin-top: 14px; text-align: center;">
+            Takes 5–10 seconds.
+          </p>
+        </form>
+      </aside>
+
+      <main class="single-output" id="single-output">
+        <div class="empty-hint">
+          <div class="em">📝</div>
+          <h3>Your three comments will appear here</h3>
+          <p>Formal, Warm, and Encouraging — you choose which fits.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- BULK MODE -->
+  <div class="mode-panel" id="panel-bulk">
+    <div class="bulk-intro">
+      <strong>Format:</strong> one student per line. Use this format:
+      <code style="background: #fbbf24; padding: 1px 6px; border-radius: 3px;">Name, Grade, Notes</code>
+      or just
+      <code style="background: #fbbf24; padding: 1px 6px; border-radius: 3px;">Name | Notes</code>.
+      Max 30 students per run.
+    </div>
+
+    <div class="bulk-input">
+      <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 13px;">Student list</label>
+      <textarea id="bulk-text" placeholder="Sarah Thompson, B, Excellent on essays, weak on timed exams, helpful in group work
+James Martin, A, Consistently high-quality work, good analytical skills, quiet in discussions
+Chen Wei | Strong numerical reasoning, struggles with written analysis, very conscientious
+...
+(one student per line, up to 30)"></textarea>
+
+      <div class="bulk-actions">
+        <button class="generate-btn" id="bulk-btn" style="width: auto; padding: 12px 22px;">
+          ⚒️ Generate all comments
+        </button>
+        <div class="progress-bar" id="bulk-progress">
+          <div class="progress-fill" id="bulk-progress-fill" style="width: 0%"></div>
+        </div>
+        <span id="bulk-progress-text" style="font-size: 13px; color: var(--mist);"></span>
+      </div>
+    </div>
+
+    <div id="bulk-status"></div>
+
+    <div class="bulk-results" id="bulk-results" style="display: none;">
+      <div class="bulk-results-header">
+        <h3 id="bulk-results-title">Results</h3>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <div class="tone-switch">
+            <button class="active" onclick="setBulkTone('formal', this)">Formal</button>
+            <button onclick="setBulkTone('warm', this)">Warm</button>
+            <button onclick="setBulkTone('encouraging', this)">Encouraging</button>
+          </div>
+          <button class="btn btn-ghost" onclick="copyAllBulk()" style="padding: 8px 14px; font-size: 13px;">📋 Copy all</button>
+          <button class="btn btn-primary" onclick="downloadCSV()" style="padding: 8px 14px; font-size: 13px;">⬇ Download CSV</button>
+        </div>
+      </div>
+      <table class="bulk-table">
+        <thead>
+          <tr>
+            <th style="width: 180px;">Student</th>
+            <th>Comment (<span id="active-tone-label">Formal</span>)</th>
+          </tr>
+        </thead>
+        <tbody id="bulk-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// Usage tracking (freemium)
+// ============================================================
+const USAGE_KEY = 'lessonforge-reports-usage-v1';
+const FREE_LIMIT = 10; // 10 students/month free
+
+function getUsage() {
+  const stored = localStorage.getItem(USAGE_KEY);
+  const month = new Date().toISOString().slice(0, 7);
+  if (!stored) return { month, count: 0 };
+  const parsed = JSON.parse(stored);
+  if (parsed.month !== month) return { month, count: 0 };
+  return parsed;
+}
+
+function bumpUsage(n = 1) {
+  const u = getUsage();
+  u.count += n;
+  localStorage.setItem(USAGE_KEY, JSON.stringify(u));
+  renderUsage();
+  return u;
+}
+
+function renderUsage() {
+  const u = getUsage();
+  const remaining = Math.max(0, FREE_LIMIT - u.count);
+  const el = document.getElementById('usage-label');
+  if (el) el.textContent = `${remaining} of ${FREE_LIMIT} free this month`;
+}
+
+renderUsage();
+
+// ============================================================
+// Mode switching
+// ============================================================
+function setMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach((t) => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.mode-panel').forEach((p) => p.classList.remove('active'));
+  document.getElementById('panel-' + mode).classList.add('active');
+}
+
+// ============================================================
+// SINGLE MODE
+// ============================================================
+document.getElementById('single-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const u = getUsage();
+  if (u.count >= FREE_LIMIT) {
+    return showLimit('single-output');
+  }
+
+  const btn = document.getElementById('single-btn');
+  btn.disabled = true;
+  btn.textContent = '⚒️ Forging...';
+
+  const output = document.getElementById('single-output');
+  output.innerHTML = `
+    <div class="empty-hint">
+      <div class="em" style="animation: spin 1s linear infinite;">⚒️</div>
+      <h3>Hammering it out...</h3>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+  `;
+
+  const payload = {
+    name: document.getElementById('s-name').value.trim(),
+    notes: document.getElementById('s-notes').value.trim(),
+    grade: document.getElementById('s-grade').value.trim(),
+    subject: document.getElementById('subject').value.trim(),
+    level: document.getElementById('level').value.trim(),
+    period: document.getElementById('period').value.trim(),
+  };
+
+  try {
+    const res = await fetch('/.netlify/functions/generate-report-comments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error(t);
+    }
+    const result = await res.json();
+    renderSingleResult(result, payload.name);
+    bumpUsage(1);
+  } catch (err) {
+    output.innerHTML = `
+      <div class="empty-hint">
+        <div class="em">⚠️</div>
+        <h3>Something went wrong</h3>
+        <div class="error" style="margin-top: 12px; text-align: left; max-width: 500px; margin: 12px auto;">${err.message}</div>
+      </div>`;
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚒️ Generate 3 comments';
+  }
+});
+
+function renderSingleResult(result, studentName) {
+  const c = result.comments || {};
+  const output = document.getElementById('single-output');
+  output.innerHTML = `
+    <h2 style="font-family: var(--font-display); font-size: 22px; margin-bottom: 18px;">
+      Comments for <span style="color: var(--ember);">${escapeHtml(studentName)}</span>
+    </h2>
+    ${commentCard('Formal', c.formal, 'formal')}
+    ${commentCard('Warm', c.warm, 'warm')}
+    ${commentCard('Encouraging', c.encouraging, 'encouraging')}
+  `;
+}
+
+function commentCard(label, text, className) {
+  return `
+    <div class="comment-card ${className}">
+      <div class="tone">${label}</div>
+      <div class="body" contenteditable="true">${escapeHtml(text || '')}</div>
+      <div class="actions">
+        <button onclick="copyComment(this)">📋 Copy</button>
+      </div>
+    </div>
+  `;
+}
+
+window.copyComment = function (btn) {
+  const text = btn.closest('.comment-card').querySelector('.body').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  });
+};
+
+// ============================================================
+// BULK MODE
+// ============================================================
+let bulkState = {
+  students: [],
+  results: [],
+  activeTone: 'formal',
+};
+
+document.getElementById('bulk-btn').addEventListener('click', async () => {
+  const rawText = document.getElementById('bulk-text').value.trim();
+  if (!rawText) {
+    showStatus('Please paste at least one student.', 'error');
+    return;
+  }
+
+  const students = parseBulkInput(rawText);
+  if (students.length === 0) {
+    showStatus('Could not parse any students. Check the format.', 'error');
+    return;
+  }
+  if (students.length > 30) {
+    showStatus('Max 30 students per run. Trim your list and try again.', 'error');
+    return;
+  }
+
+  const u = getUsage();
+  if (u.count + students.length > FREE_LIMIT) {
+    showStatus(`Free limit: ${FREE_LIMIT}/month. You have ${FREE_LIMIT - u.count} left. Upgrade to Pro for unlimited.`, 'error');
+    return;
+  }
+
+  bulkState.students = students;
+  bulkState.results = students.map((s) => ({ name: s.name, status: 'pending' }));
+  renderBulkTable();
+
+  const btn = document.getElementById('bulk-btn');
+  const progressBar = document.getElementById('bulk-progress');
+  const progressFill = document.getElementById('bulk-progress-fill');
+  const progressText = document.getElementById('bulk-progress-text');
+  btn.disabled = true;
+  btn.textContent = '⚒️ Forging...';
+  progressBar.classList.add('active');
+
+  const common = {
+    subject: document.getElementById('subject').value.trim(),
+    level: document.getElementById('level').value.trim(),
+    period: document.getElementById('period').value.trim(),
+  };
+
+  let done = 0;
+  const total = students.length;
+
+  // Parallel with small throttle (max 5 concurrent)
+  const CONCURRENCY = 5;
+  const queue = [...students.keys()];
+
+  async function worker() {
+    while (queue.length > 0) {
+      const idx = queue.shift();
+      const s = students[idx];
+      try {
+        const res = await fetch('/.netlify/functions/generate-report-comments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...s, ...common }),
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        bulkState.results[idx] = { name: s.name, comments: data.comments, status: 'done' };
+      } catch (err) {
+        console.error('Failed for', s.name, err);
+        bulkState.results[idx] = { name: s.name, status: 'failed', error: err.message };
+      }
+      done++;
+      const pct = Math.round((done / total) * 100);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = `${done}/${total} done`;
+      renderBulkTable();
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, students.length) }, worker));
+
+  bumpUsage(students.filter((_, i) => bulkState.results[i].status === 'done').length);
+  btn.disabled = false;
+  btn.textContent = '⚒️ Generate all comments';
+  const failed = bulkState.results.filter((r) => r.status === 'failed').length;
+  if (failed) {
+    showStatus(`Completed with ${failed} failed. Check table; retry individually if needed.`, 'error');
+  } else {
+    showStatus(`All ${total} comments generated. Review, edit, copy/download.`, 'success');
+  }
+});
+
+function parseBulkInput(text) {
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  return lines.map((line) => {
+    // Try "Name | Notes" first (unambiguous)
+    if (line.includes('|')) {
+      const [name, ...rest] = line.split('|').map((s) => s.trim());
+      return { name, notes: rest.join(' | ') };
+    }
+    // Try "Name, Grade, Notes" — grade is 1-2 chars or single char+symbol
+    const parts = line.split(',').map((s) => s.trim());
+    if (parts.length >= 3 && parts[1].length <= 3) {
+      return { name: parts[0], grade: parts[1], notes: parts.slice(2).join(', ') };
+    }
+    // Fallback: "Name, Notes"
+    if (parts.length >= 2) {
+      return { name: parts[0], notes: parts.slice(1).join(', ') };
+    }
+    return null;
+  }).filter(Boolean);
+}
+
+function renderBulkTable() {
+  const resultsEl = document.getElementById('bulk-results');
+  const tbody = document.getElementById('bulk-tbody');
+  resultsEl.style.display = 'block';
+  document.getElementById('bulk-results-title').textContent = `${bulkState.results.length} students`;
+
+  tbody.innerHTML = bulkState.results.map((r) => {
+    let cellContent;
+    if (r.status === 'pending') cellContent = '<span class="pending">waiting…</span>';
+    else if (r.status === 'failed') cellContent = `<span class="failed">failed: ${escapeHtml(r.error || 'unknown')}</span>`;
+    else cellContent = `<span contenteditable="true">${escapeHtml(r.comments?.[bulkState.activeTone] || '')}</span>`;
+    return `<tr><td class="name">${escapeHtml(r.name)}</td><td class="comment">${cellContent}</td></tr>`;
+  }).join('');
+}
+
+window.setBulkTone = function (tone, btn) {
+  bulkState.activeTone = tone;
+  document.querySelectorAll('.tone-switch button').forEach((b) => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('active-tone-label').textContent = tone.charAt(0).toUpperCase() + tone.slice(1);
+  renderBulkTable();
+};
+
+window.copyAllBulk = function () {
+  const lines = bulkState.results
+    .filter((r) => r.status === 'done')
+    .map((r) => `${r.name}\t${r.comments[bulkState.activeTone] || ''}`);
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    showStatus(`Copied ${lines.length} comments to clipboard (tab-separated, paste into Excel).`, 'success');
+  });
+};
+
+window.downloadCSV = function () {
+  const rows = [['Student', 'Formal', 'Warm', 'Encouraging']];
+  bulkState.results.forEach((r) => {
+    if (r.status === 'done') {
+      const c = r.comments || {};
+      rows.push([r.name, c.formal || '', c.warm || '', c.encouraging || '']);
+    }
+  });
+  const csv = rows.map((row) =>
+    row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+  ).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `report-comments-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+function showStatus(msg, type = 'info') {
+  const el = document.getElementById('bulk-status');
+  el.innerHTML = `<div class="status-banner ${type}">${escapeHtml(msg)}</div>`;
+  setTimeout(() => { el.innerHTML = ''; }, 6000);
+}
+
+function showLimit(targetId) {
+  const el = document.getElementById(targetId);
+  el.innerHTML = `
+    <div class="empty-hint">
+      <div class="em">🔒</div>
+      <h3>Free limit reached</h3>
+      <p style="max-width: 360px; margin: 12px auto;">You've used all ${FREE_LIMIT} free comments this month. Upgrade to Pro for unlimited.</p>
+      <a href="index.html#pricing" class="btn btn-primary" style="margin-top: 16px; display: inline-block;">See Pro</a>
+    </div>
+  `;
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  })[c]);
+}
+</script>
+
+</body>
+</html>
