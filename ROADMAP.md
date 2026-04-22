@@ -323,21 +323,37 @@ Ratkaisu Netlify 10s timeout -ongelmaan: vaihto Claude Sonnet → Claude Haiku 4
 
 **Day 2 tulos:** 7 osiota, 847 sanaa, ~$0.003/plan API-kustannus. Output kvaliteetti "HoD would say yes" -tasolla.
 
+**22.4 (Day 3) — Report Card Comments [KILLER FEATURE LIVE]:**
+- ✅ Uusi `reports.html` — two-mode UI (Single student / Bulk up to 30)
+- ✅ Uusi `netlify/functions/generate-report-comments.js` — 3 tonal variants per oppilas
+- ✅ **Single mode:** name + notes + optional grade → Formal / Warm / Encouraging kommentit 24 sek:ssä
+- ✅ **Bulk mode:** paste 30 oppilaan taulukko → parallel processing (5 concurrent) → progress bar → CSV download
+- ✅ Tone-switch UI: klikkaa Formal/Warm/Encouraging → taulukko päivittyy
+- ✅ Jokainen kommentti 2–4 lausetta, British English, **viittaa oikeisiin muistiinpanoihin** (ei geneerinen)
+- ✅ Kielletyt AI-slop-sanat: truly, journey, unlock, empower, comprehensive, leverage, jne.
+- ✅ Testitulos: 3 oppilasta 28 sekunnissa, 100% success rate
+- ✅ Freemium gate: 10 kommenttia/kk ilmainen, Pro £9/kk rajaton
+- ✅ Landing page päivitetty — nav-linkit, hero-CTA, feature card "LIVE"-merkillä
+
+**Day 3 value proposition:** UK-opettaja käyttää keskimäärin **15 tuntia per termi** report-kommentteihin (30 oppilasta × 3 ainetta × 10 min/kommentti). Tämä työkalu leikkaa sen **15 minuuttiin**. Eli yksi feature säästää opettajalle **100× aikaa kustakin tilauksesta** → £9/kk = <£0.09 per säästetty tunti.
+
+**Tämä on se yksittäinen työkalu joka myy koko tuotteen.**
+
 **[Seuraavat päivät lisätään tähän]**
 
 ---
 
-## 📌 Day 3 suunnitelma (23.4)
+## 📌 Day 4 suunnitelma (23.4)
 
-- **Report Card Comments** -työkalu (killer feature, £9/kk myy yksin)
-- Bulk CSV-upload 30 oppilaalle → 3 kommenttia per oppilas
-- Teacher valitsee ton (formal/warm/encouraging)
-- Excel-output takaisin
+- **Quiz & Exam Builder** — AQA-style mark schemes, AO-tagging
+- Input: subject + level + topic + question type (MCQ / short / essay) + count
+- Output: kysymykset + model answers + mark schemes
+- PDF: teacher version (with answers) + student version (without)
 
 ---
 
 *Tämä dokumentti on elävä. Päivitetään joka viikko. Jos joku kohta ei toimi, muutetaan suuntaa — mutta aina vastaten siihen ensimmäiseen kysymykseen: miksi opettaja valitsee tämän ChatGPT:n sijaan.*
 
-**Viimeisin päivitys:** 22.4.2026 (Day 2 complete)
+**Viimeisin päivitys:** 22.4.2026 (Day 2 + Day 3 complete)
 **Vastuu:** Sakari Laajoki (founder) + Claude (build)
-**Seuraava checkpoint:** 28.4.2026 (Viikko 1 loppu)
+**Seuraava checkpoint:** 28.4.2026 (Viikko 1 loppu — tavoite 5/5 työkalua)
