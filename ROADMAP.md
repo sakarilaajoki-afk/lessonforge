@@ -339,21 +339,42 @@ Ratkaisu Netlify 10s timeout -ongelmaan: vaihto Claude Sonnet → Claude Haiku 4
 
 **Tämä on se yksittäinen työkalu joka myy koko tuotteen.**
 
+**22.4 (Day 4) — Quiz & Exam Builder LIVE:**
+- ✅ Uusi `quiz.html` — form + results + Teacher/Student view toggle
+- ✅ Uusi `netlify/functions/generate-quiz.js` — board-specific prompt
+- ✅ Question types: MCQ (1 mark), short-answer (2–10 marks), essay (9/12/16 markers)
+- ✅ Counts: 5/10/15/20
+- ✅ Difficulty: standard / challenging / exam-stretch
+- ✅ AO-tagging (AO1/AO2/AO3/AO4) every question
+- ✅ Teacher view: kaikki kysymykset + mallivastaukset + mark scheme
+- ✅ Student view: vain kysymykset (mark scheme piilotettu)
+- ✅ Print / Save PDF -nappi toimii molemmille näkymille
+- ✅ Navigaatio päivitetty kaikilla sivuilla (index/app/reports/quiz)
+- ✅ Landing page feature card "LIVE"-merkillä
+- ✅ Freemium: 5 quizia/kk free, Pro rajaton
+- ✅ Testitulos: 10 kysymystä (MCQ+short) 54 sekunnissa Cash flow -aiheella, 9141 merkkiä, AO1 tagit oikein
+- 🟡 Huomaa: 10 kysymyksen quizissa Quiz Summary -osio voi jäädä truncatiksi (max_tokens-raja). Toimii muuten — voidaan iteroida v2:ssa.
+
+**Day 4 value proposition:** UK-opettaja tekee noin **3 end-of-topic-quizia per termi per aine**. 30 min per quiz manuaalisesti → 90 min säästö per termi per aine. 3 ainetta × 3 termiä = **13,5 h/v säästöä yhdeltä opettajalta**.
+
+**Viikon 1 loppu (22.4 iltana):** 4/5 työkalua valmista (Lesson Plan, Report Comments, Quiz). 5. työkalu Day 5:llä (Worksheet).
+
 **[Seuraavat päivät lisätään tähän]**
 
 ---
 
-## 📌 Day 4 suunnitelma (23.4)
+## 📌 Day 5 suunnitelma (23.4)
 
-- **Quiz & Exam Builder** — AQA-style mark schemes, AO-tagging
-- Input: subject + level + topic + question type (MCQ / short / essay) + count
-- Output: kysymykset + model answers + mark schemes
-- PDF: teacher version (with answers) + student version (without)
+- **Worksheet Generator** — student-facing handout PDF
+- Input: subject + level + topic + activity type (practice / investigation / revision)
+- Output: student handout (intro, worked examples, 10 practice questions, extension)
+- Answer key separate sivulla
+- Brand-logo alareunassa
 
 ---
 
 *Tämä dokumentti on elävä. Päivitetään joka viikko. Jos joku kohta ei toimi, muutetaan suuntaa — mutta aina vastaten siihen ensimmäiseen kysymykseen: miksi opettaja valitsee tämän ChatGPT:n sijaan.*
 
-**Viimeisin päivitys:** 22.4.2026 (Day 2 + Day 3 complete)
+**Viimeisin päivitys:** 22.4.2026 (Day 2 + Day 3 + Day 4 complete, 3 työkalua live)
 **Vastuu:** Sakari Laajoki (founder) + Claude (build)
 **Seuraava checkpoint:** 28.4.2026 (Viikko 1 loppu — tavoite 5/5 työkalua)
