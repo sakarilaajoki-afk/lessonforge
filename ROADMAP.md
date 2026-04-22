@@ -310,12 +310,34 @@ Tämä erottaa meidät Magic School:sta (US-hosting, data-policy vähemmän stri
 
 **21.4 (Day 1):** MVP rakenne pystyyn. Landing page, Lesson Plan Generator v1, brand, Netlify deploy. Env var setup. Ensimmäinen lesson plan generoitu.
 
+**22.4 (Day 2):** GitHub repo luotu, Netlify ↔ GitHub auto-deploy kytketty, Credential Manager konfiguroitu (Claude voi pushata nyt itse). Lesson Plan prompti ylevöitetty:
+- ✅ Case Study generation (120–150 sanan fiktiivinen UK-yritys oikeilla numeroilla, esim. Northside Coffee Ltd)
+- ✅ Sample Exam Question (board-tarkka, AQA/Pearson/OCR tyyli)
+- ✅ Mark Scheme AO-tageilla (AO1/AO2/AO3/AO4)
+- ✅ Slide Outline (4 slidea numeroituna)
+- ✅ Resources to Enrich (past paper -viitteet + news-hakuja, esim. "Tesco price war 2024")
+- ✅ Curriculum Links (tarkat spec-koodit, esim. "AQA 7132 3.3.3")
+- ✅ AO-tagging Learning Objectives:ssa
+
+Ratkaisu Netlify 10s timeout -ongelmaan: vaihto Claude Sonnet → Claude Haiku 4.5 (10× halvempi, 5× nopeampi). Radikaalisti tiivistetty prompt mahtuu 2500 max_tokens → 34s generointi, ei timeoutia.
+
+**Day 2 tulos:** 7 osiota, 847 sanaa, ~$0.003/plan API-kustannus. Output kvaliteetti "HoD would say yes" -tasolla.
+
 **[Seuraavat päivät lisätään tähän]**
+
+---
+
+## 📌 Day 3 suunnitelma (23.4)
+
+- **Report Card Comments** -työkalu (killer feature, £9/kk myy yksin)
+- Bulk CSV-upload 30 oppilaalle → 3 kommenttia per oppilas
+- Teacher valitsee ton (formal/warm/encouraging)
+- Excel-output takaisin
 
 ---
 
 *Tämä dokumentti on elävä. Päivitetään joka viikko. Jos joku kohta ei toimi, muutetaan suuntaa — mutta aina vastaten siihen ensimmäiseen kysymykseen: miksi opettaja valitsee tämän ChatGPT:n sijaan.*
 
-**Viimeisin päivitys:** 21.4.2026
+**Viimeisin päivitys:** 22.4.2026 (Day 2 complete)
 **Vastuu:** Sakari Laajoki (founder) + Claude (build)
 **Seuraava checkpoint:** 28.4.2026 (Viikko 1 loppu)
