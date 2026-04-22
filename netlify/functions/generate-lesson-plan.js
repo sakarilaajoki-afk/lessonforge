@@ -59,7 +59,7 @@ exports.handler = async (event) => {
         // Quality is still strong for lesson planning; we can A/B test Sonnet later
         // if we upgrade to Netlify Pro (26s timeout) or move to background functions.
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2500,
+        max_tokens: 3500,
         temperature: 0.5,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
@@ -156,7 +156,7 @@ Company name **bold** at start, then narrative. Tight — no filler.
 One concrete activity. What students do, what teacher does, resources.
 
 ## Main Task (the bulk of the lesson)
-Step-by-step breakdown with timing in brackets. Reference the Case Study above where relevant. Include a clear "students produce X by end" outcome.
+Step-by-step. Timing in brackets. Reference the Case Study. End with "students produce X by end". Keep total under 200 words.
 
 ## Plenary (5–10 min)
 One concrete activity. Check understanding.
