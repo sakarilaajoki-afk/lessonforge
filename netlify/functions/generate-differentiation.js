@@ -35,8 +35,8 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2200,
-        temperature: 0.5,
+        max_tokens: 1800,
+        temperature: 0.4,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
       }),
@@ -90,82 +90,48 @@ const SYSTEM_PROMPT = `You are LessonForge, an AI that generates PRACTICAL DIFFE
 - Stretch = increase cognitive demand (open-endedness, cross-topic links, evaluation, original application)
 - NOT: "do fewer questions" vs "do more questions". That's lazy.
 
-**OUTPUT FORMAT — exactly in this order:**
+**OUTPUT FORMAT — strict, in this order. Strict length limits.**
 
 # Differentiation Brief
-**Base task:** [one-line summary of the original task]
-**Subject/Level:** [values]
+**Base task:** [one-line summary]
+**Level:** [value]
 
 ---
 
-## Scaffold Version (lower ability support)
-### Adapted task
-[The task, rewritten with scaffolds — this is what you'd hand the student]
-
-### What's different from the core task
-- [Specific change 1 — e.g. "provide a completed worked example before students attempt their own"]
-- [Specific change 2 — e.g. "replace open prompt with 3 sentence starters"]
-- [Specific change 3]
+## Scaffold Version (support)
+**Adapted task:** [rewritten with scaffolds, 2–4 sentences max]
+**Key changes:** 3 bullet points, one line each.
 
 ---
 
-## Core Version (on-level)
-### Adapted task
-[The core task — essentially the base task, tightened if needed]
-
-### What's different from the base
-[One line, or "Same as base task" if no changes needed.]
+## Core Version
+**Adapted task:** [the base task, essentially unchanged. 1–2 sentences]
 
 ---
 
-## Stretch Version (higher ability challenge)
-### Adapted task
-[The task, rewritten with stretch]
-
-### What's different from the core task
-- [Specific change 1 — e.g. "add a counter-argument component requiring evaluation"]
-- [Specific change 2]
-- [Specific change 3]
+## Stretch Version (challenge)
+**Adapted task:** [rewritten with stretch, 2–4 sentences max]
+**Key changes:** 3 bullet points, one line each.
 
 ---
 
 ## SEN Adaptations
-
-### For dyslexia / reading difficulty
-- [Specific adjustment 1 — e.g. "print on cream paper, font size 14+, sans-serif"]
-- [Specific adjustment 2]
-
-### For ADHD / focus difficulties
-- [Specific adjustment 1 — e.g. "break task into 5-minute chunks with tick-box completion"]
-- [Specific adjustment 2]
-
-### For ASD / routine preferences
-- [Specific adjustment — e.g. "provide visual timer and stated order of steps"]
-
-(If class context mentions specific needs, prioritise those — skip any that don't apply.)
-
----
+Only include categories relevant to class context. If none specified, pick the 2 most likely for this age group. One line per adjustment.
+- **[Category, e.g. Dyslexia]:** specific change 1; specific change 2.
+- **[Category, e.g. ADHD]:** specific change 1; specific change 2.
 
 ## EAL Adaptations
-
-For students with English as an Additional Language:
-- [Vocabulary scaffold — e.g. "pre-teach 4 subject-specific terms with visuals: X, Y, Z, W"]
-- [Sentence frames — e.g. "provide starters: 'This suggests that...', 'However...', 'Therefore...'"]
-- [Task modification — e.g. "allow labelled diagrams or bullet-point answers instead of full prose"]
-
----
+- **Vocabulary:** pre-teach 3–4 key terms: [list them].
+- **Sentence frames:** provide starters ("This shows...", "However...", "Therefore...").
+- **Task modification:** [specific alternative format, e.g. "bullet points + diagram acceptable"].
 
 ## Teacher Notes
-- **Common misconception at this level:** [one specific student error]
-- **Assessment suggestion:** [how to quickly check each version is working]
-- **Estimated time:** [if task is time-bound]
+- **Common misconception:** [one specific error].
+- **Quick check:** [one way to verify students understand, 1 line].
 
 ---
 
-**Hard rules:**
-- Total 700–900 words. Be disciplined.
-- Every adaptation must be actionable by tomorrow morning.
-- Never suggest "give them an iPad" or similar without explaining why.`;
+**Length:** 500–700 words TOTAL. Be tight. Every line must add value.`;
 
 function buildPrompt({ baseTask, subject, level, examBoard, classNeeds }) {
   return `Generate differentiation for this task:
