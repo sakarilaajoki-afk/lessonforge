@@ -35,6 +35,7 @@
       <a href="app.html">Lesson plans</a>
       <a href="quiz.html">Quiz</a>
       <a href="worksheet.html">Worksheet</a>
+      <a href="differentiation.html">Differentiation</a>
       <a href="reports.html">Reports</a>
       <a href="#pricing">Pricing</a>
       <a href="app.html" class="btn btn-primary">Try free</a>
@@ -47,10 +48,10 @@
   <h1>Forge better lessons, <span class="highlight">faster.</span></h1>
   <p class="hero-sub">AI that builds lesson plans, quizzes, worksheets and report comments for any subject, from Year 1 to university. Trained on the UK and Australian curriculum. Made for teachers who are tired of starting from blank pages at 9 pm.</p>
   <div class="hero-cta-row">
-    <a href="app.html" class="btn btn-primary">Forge a lesson plan →</a>
-    <a href="reports.html" class="btn btn-ghost">Report comments tool →</a>
+    <a href="app.html" class="btn btn-primary">Try the tools free →</a>
+    <a href="#founding" class="btn btn-ghost">Become a Founding Teacher ⭐</a>
   </div>
-  <p class="hero-note">Free for five lessons a month. No credit card. No sales call.</p>
+  <p class="hero-note">50 teachers get it free forever. Regular users: 5 free/month per tool.</p>
 </section>
 
 <section class="proof">
@@ -88,11 +89,11 @@
       <h3>Worksheet &amp; Handout <span style="font-size: 10px; background: var(--forged); color: white; padding: 2px 8px; border-radius: 999px; vertical-align: middle; letter-spacing: 0.05em;">LIVE</span></h3>
       <p>Student-facing PDF handouts with worked example, 6–10 practice questions, and separate answer key. Print and go.</p>
     </a>
-    <div class="feature">
+    <a href="differentiation.html" class="feature" style="text-decoration: none; color: inherit;">
       <div class="feature-icon">🎯</div>
-      <h3>Differentiation Helper</h3>
-      <p>One task, three versions: scaffold, core, stretch. Plus SEN-friendly instructions and EAL support.</p>
-    </div>
+      <h3>Differentiation Helper <span style="font-size: 10px; background: var(--forged); color: white; padding: 2px 8px; border-radius: 999px; vertical-align: middle; letter-spacing: 0.05em;">LIVE</span></h3>
+      <p>One task, three versions: scaffold, core, stretch. Plus specific SEN and EAL adaptations — not "give them more time".</p>
+    </a>
     <a href="reports.html" class="feature" style="text-decoration: none; color: inherit;">
       <div class="feature-icon">💬</div>
       <h3>Report Card Comments <span style="font-size: 10px; background: var(--forged); color: white; padding: 2px 8px; border-radius: 999px; vertical-align: middle; letter-spacing: 0.05em;">LIVE</span></h3>
@@ -190,11 +191,96 @@
   </div>
 </section>
 
+<section id="founding" style="background: var(--ink); color: white; padding: 80px 24px;">
+  <div style="max-width: 720px; margin: 0 auto; text-align: center;">
+    <div style="display: inline-block; padding: 6px 14px; background: rgba(255,184,0,.15); color: #FFB800; border-radius: 999px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 18px;">
+      🔨 Founding Teacher Programme — first 50 UK/AU teachers
+    </div>
+    <h2 style="font-family: var(--font-display); font-size: clamp(28px, 4vw, 40px); line-height: 1.15; font-weight: 700; margin-bottom: 14px;">
+      Free forever if you join this week.
+    </h2>
+    <p style="color: rgba(255,255,255,.8); font-size: 17px; margin-bottom: 28px; max-width: 520px; margin-left: auto; margin-right: auto;">
+      Sakari (the founder) personally onboards the first 50 teachers. You get all 5 tools, unlimited, free for life. In exchange: 15 minutes of feedback after a week of use.
+    </p>
+
+    <form id="founding-form" style="max-width: 520px; margin: 0 auto; display: grid; gap: 10px; text-align: left;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <input type="text" name="name" placeholder="Your name" required
+          style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 15px; font-family: inherit;">
+        <input type="email" name="email" placeholder="School email" required
+          style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 15px; font-family: inherit;">
+      </div>
+      <input type="text" name="school" placeholder="School / college name"
+        style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 15px; font-family: inherit;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+        <input type="text" name="subject" placeholder="Subject (e.g. Business)"
+          style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 14px; font-family: inherit;">
+        <input type="text" name="level" placeholder="Level (e.g. KS5)"
+          style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 14px; font-family: inherit;">
+        <select name="country" style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 14px; font-family: inherit;">
+          <option value="" style="color: #333;">Country</option>
+          <option value="UK" style="color: #333;">United Kingdom</option>
+          <option value="AU" style="color: #333;">Australia</option>
+          <option value="NZ" style="color: #333;">New Zealand</option>
+          <option value="IE" style="color: #333;">Ireland</option>
+          <option value="Other" style="color: #333;">Other</option>
+        </select>
+      </div>
+      <textarea name="why" rows="2" placeholder="(Optional) What do you most need help with right now?"
+        style="padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: white; font-size: 14px; font-family: inherit; resize: vertical;"></textarea>
+      <button type="submit" class="btn btn-primary" style="font-size: 17px; padding: 16px 32px; margin-top: 6px;">
+        Count me in as a Founding Teacher
+      </button>
+      <p style="color: rgba(255,255,255,.6); font-size: 12px; text-align: center; margin-top: 4px;">
+        Only 50 spots. We'll reply within 2 working days.
+      </p>
+    </form>
+
+    <div id="founding-status" style="margin-top: 16px; display: none;"></div>
+  </div>
+</section>
+
 <section class="cta">
-  <h2>Your first lesson plan is 30 seconds away.</h2>
-  <p>Free to try. No credit card. No spam. Just the tool, running in your browser.</p>
+  <h2>Or just try the tools — no signup needed.</h2>
+  <p>All 5 tools work without an account. Free tier is generous.</p>
   <a href="app.html" class="btn btn-primary" style="font-size: 17px; padding: 16px 32px;">Forge your first lesson →</a>
 </section>
+
+<script>
+document.getElementById('founding-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const statusEl = document.getElementById('founding-status');
+  const btn = form.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const data = Object.fromEntries(new FormData(form));
+  try {
+    const res = await fetch('/.netlify/functions/founding-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+    statusEl.style.display = 'block';
+    if (result.ok) {
+      statusEl.innerHTML = '<div style="background: rgba(5,150,105,.2); border: 1px solid rgba(5,150,105,.5); color: #86efac; padding: 14px 20px; border-radius: 10px;">✓ ' + result.message + '</div>';
+      form.reset();
+      btn.textContent = 'Done — watch your inbox';
+    } else {
+      statusEl.innerHTML = '<div style="background: rgba(239,68,68,.2); border: 1px solid rgba(239,68,68,.5); color: #fca5a5; padding: 14px 20px; border-radius: 10px;">' + (result.error || 'Something went wrong') + '</div>';
+      btn.disabled = false;
+      btn.textContent = 'Count me in as a Founding Teacher';
+    }
+  } catch (err) {
+    statusEl.style.display = 'block';
+    statusEl.innerHTML = '<div style="background: rgba(239,68,68,.2); border: 1px solid rgba(239,68,68,.5); color: #fca5a5; padding: 14px 20px; border-radius: 10px;">Network error — please email hello@lessonforge.uk directly.</div>';
+    btn.disabled = false;
+    btn.textContent = 'Count me in as a Founding Teacher';
+  }
+});
+</script>
 
 <footer class="footer">
   <div class="footer-inner">

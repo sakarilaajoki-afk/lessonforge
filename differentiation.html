@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Differentiation Helper — LessonForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js" defer></script>
+<style>
+  .diff-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 900px) { .diff-layout { grid-template-columns: 1fr; } }
+
+  .diff-form {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+  }
+  .diff-form h1 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .diff-form .subtitle { color: var(--mist); font-size: 13px; margin-bottom: 20px; }
+
+  .diff-output {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    min-height: 500px;
+  }
+
+  .diff-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mist);
+  }
+  .diff-empty .em { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .diff-empty h2 { font-family: var(--font-display); font-size: 20px; color: var(--anvil); margin-bottom: 6px; }
+
+  .diff-content h1 { font-family: var(--font-display); font-size: 24px; margin-bottom: 6px; color: var(--ink); }
+  .diff-content h2 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin: 24px 0 10px;
+    color: var(--ink);
+    border-left: 3px solid var(--ember);
+    padding-left: 12px;
+  }
+  /* Colour-code the three ability levels */
+  .diff-content h2:nth-of-type(1) { border-left-color: #60a5fa; }  /* Scaffold — blue */
+  .diff-content h2:nth-of-type(2) { border-left-color: var(--ember); }  /* Core — ember */
+  .diff-content h2:nth-of-type(3) { border-left-color: var(--forged); }  /* Stretch — green */
+  .diff-content h2:nth-of-type(4) { border-left-color: #a855f7; }  /* SEN — purple */
+  .diff-content h2:nth-of-type(5) { border-left-color: #f59e0b; }  /* EAL — amber */
+  .diff-content h2:nth-of-type(6) { border-left-color: var(--mist); } /* Teacher Notes */
+
+  .diff-content h3 { font-family: var(--font-display); font-size: 15px; margin: 16px 0 6px; color: var(--anvil); }
+  .diff-content p { margin-bottom: 10px; line-height: 1.65; }
+  .diff-content ul, .diff-content ol { padding-left: 22px; margin-bottom: 12px; }
+  .diff-content li { margin-bottom: 6px; line-height: 1.6; }
+  .diff-content strong { color: var(--ink); }
+  .diff-content hr { border: none; border-top: 1px dashed var(--steel); margin: 22px 0; }
+
+  .diff-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    background: var(--paper);
+    border-radius: var(--radius);
+    border: 1px solid var(--steel);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .diff-actions button {
+    background: var(--ember);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .diff-actions button:hover { background: #b33912; }
+  .diff-actions button.ghost {
+    background: white;
+    color: var(--anvil);
+    border: 1px solid var(--steel);
+  }
+  .diff-actions button.ghost:hover { border-color: var(--ember); color: var(--ember); }
+
+  @media print {
+    .nav, .diff-form, .diff-actions { display: none !important; }
+    .diff-layout { grid-template-columns: 1fr; padding: 0; }
+    .diff-output { border: none; padding: 0; }
+    body { background: white; }
+  }
+
+  .error {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand-mark" style="color: inherit; text-decoration: none;">
+      <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
+        <defs><linearGradient id="e1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#d84315"/></linearGradient></defs>
+        <rect x="10" y="44" width="44" height="8" rx="1.5" fill="#1a1f36"/>
+        <rect x="16" y="36" width="32" height="8" rx="1" fill="#1a1f36"/>
+        <path d="M 48 36 L 56 32 L 56 40 L 48 44 Z" fill="#1a1f36"/>
+        <path d="M 18 28 L 46 28 L 46 36 L 18 36 Z" fill="#3a3f51"/>
+        <path d="M 32 28 L 32 36" stroke="#1a1f36" stroke-width="1"/>
+        <path d="M 32 22 Q 28 16, 32 8 Q 36 16, 32 22 Z" fill="url(#e1)"/>
+        <circle cx="38" cy="14" r="2" fill="#f97316" opacity="0.6"/>
+        <circle cx="26" cy="18" r="1.5" fill="#f97316" opacity="0.5"/>
+      </svg>
+      <span>LessonForge</span>
+    </a>
+    <div class="nav-links">
+      <a href="app.html">Lesson plans</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="worksheet.html">Worksheet</a>
+      <a href="reports.html">Reports</a>
+      <a href="index.html#pricing">Pricing</a>
+      <span style="color: var(--mist); font-size: 13px;" id="usage-label">—</span>
+    </div>
+  </div>
+</nav>
+
+<div class="diff-layout">
+
+  <aside class="diff-form">
+    <h1>🎯 Differentiation Helper</h1>
+    <p class="subtitle">Paste any task — get scaffold, core, stretch, plus SEN and EAL adaptations.</p>
+
+    <form id="diff-form">
+      <div class="field">
+        <label for="base-task">The base task</label>
+        <textarea id="base-task" rows="6" placeholder="Paste your original task here. E.g. 'Evaluate whether JD Sports should open new stores in northern England. (16 marks)'" required></textarea>
+        <div class="hint">Any task — prompt, question, worksheet question, lab brief, essay title</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="subject">Subject (optional)</label>
+          <input type="text" id="subject" placeholder="e.g. Business">
+        </div>
+        <div class="field">
+          <label for="level">Level</label>
+          <select id="level" required>
+            <optgroup label="Primary (UK)">
+              <option>Year 3 (KS2)</option>
+              <option>Year 4 (KS2)</option>
+              <option>Year 5 (KS2)</option>
+              <option>Year 6 (KS2)</option>
+            </optgroup>
+            <optgroup label="Secondary (UK)">
+              <option>Year 7 (KS3)</option>
+              <option>Year 8 (KS3)</option>
+              <option>Year 9 (KS3)</option>
+              <option>Year 10 (GCSE)</option>
+              <option>Year 11 (GCSE)</option>
+              <option selected>Year 12 (A-Level/BTEC)</option>
+              <option>Year 13 (A-Level/BTEC)</option>
+            </optgroup>
+            <optgroup label="Secondary (AU)">
+              <option>Year 11 (HSC/VCE)</option>
+              <option>Year 12 (HSC/VCE)</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="exam-board">Exam board (optional)</label>
+        <select id="exam-board">
+          <option value="">— Not specified —</option>
+          <option>AQA</option>
+          <option>Pearson Edexcel</option>
+          <option>OCR</option>
+          <option>WJEC</option>
+          <option>CCEA</option>
+          <option>Scottish CfE</option>
+          <option>ACARA (AU national)</option>
+          <option>NSW Syllabus (HSC)</option>
+          <option>VIC VCE</option>
+          <option>IB MYP / DP</option>
+          <option>IGCSE / Cambridge</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="class-needs">Class context / specific needs (optional)</label>
+        <textarea id="class-needs" rows="2" placeholder="e.g. 28 students, 3 SEN (dyslexia), 2 EAL (Polish, Urdu), mixed ability"></textarea>
+        <div class="hint">Tell us about SEN or EAL learners — adaptations will target those</div>
+      </div>
+
+      <button type="submit" class="generate-btn" id="diff-btn">
+        ⚒️ Differentiate this task
+      </button>
+      <p style="font-size: 12px; color: var(--mist); margin-top: 12px; text-align: center;">
+        Takes 20–30 seconds.
+      </p>
+    </form>
+  </aside>
+
+  <main class="diff-output" id="diff-output">
+    <div class="diff-empty">
+      <div class="em">🎯</div>
+      <h2>Your differentiation brief will appear here</h2>
+      <p>Scaffold · Core · Stretch · SEN · EAL — all specific, all actionable tomorrow.</p>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const USAGE_KEY = 'lessonforge-diff-usage-v1';
+const FREE_LIMIT = 5;
+
+function getUsage() {
+  const stored = localStorage.getItem(USAGE_KEY);
+  const month = new Date().toISOString().slice(0, 7);
+  if (!stored) return { month, count: 0 };
+  const parsed = JSON.parse(stored);
+  if (parsed.month !== month) return { month, count: 0 };
+  return parsed;
+}
+function bumpUsage() {
+  const u = getUsage();
+  u.count++;
+  localStorage.setItem(USAGE_KEY, JSON.stringify(u));
+  renderUsage();
+}
+function renderUsage() {
+  const u = getUsage();
+  const remaining = Math.max(0, FREE_LIMIT - u.count);
+  const el = document.getElementById('usage-label');
+  if (el) el.textContent = `${remaining} of ${FREE_LIMIT} free this month`;
+}
+renderUsage();
+
+const form = document.getElementById('diff-form');
+const output = document.getElementById('diff-output');
+const btn = document.getElementById('diff-btn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const u = getUsage();
+  if (u.count >= FREE_LIMIT) {
+    output.innerHTML = `
+      <div class="diff-empty">
+        <div class="em">🔒</div>
+        <h2>Free limit reached</h2>
+        <p style="max-width: 360px; margin: 12px auto;">You've used all ${FREE_LIMIT} free differentiation briefs this month. Upgrade to Pro for unlimited.</p>
+        <a href="index.html#pricing" class="btn btn-primary" style="display: inline-block; margin-top: 16px;">See Pro</a>
+      </div>`;
+    return;
+  }
+
+  const payload = {
+    baseTask: document.getElementById('base-task').value.trim(),
+    subject: document.getElementById('subject').value.trim(),
+    level: document.getElementById('level').value,
+    examBoard: document.getElementById('exam-board').value,
+    classNeeds: document.getElementById('class-needs').value.trim(),
+  };
+
+  btn.disabled = true;
+  btn.textContent = '⚒️ Forging...';
+
+  output.innerHTML = `
+    <div class="diff-empty">
+      <div class="em" style="animation: spin 1s linear infinite;">⚒️</div>
+      <h2>Hammering it out...</h2>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+  `;
+
+  try {
+    const res = await fetch('/.netlify/functions/generate-differentiation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const result = await res.json();
+    renderDifferentiation(result.differentiation);
+    bumpUsage();
+  } catch (err) {
+    output.innerHTML = `
+      <div class="diff-empty">
+        <div class="em">⚠️</div>
+        <h2>Something went wrong</h2>
+        <div class="error" style="margin-top: 12px; max-width: 500px; margin-left: auto; margin-right: auto;">${err.message}</div>
+      </div>`;
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚒️ Differentiate this task';
+  }
+});
+
+function renderDifferentiation(raw) {
+  if (!raw) { output.innerHTML = `<div class="diff-empty"><h2>Empty response</h2></div>`; return; }
+  const html = window.marked.parse(raw);
+  output.innerHTML = `
+    <div class="diff-actions">
+      <button class="ghost" onclick="copyAll()">📋 Copy all</button>
+      <button onclick="window.print()">🖨️ Print / Save PDF</button>
+    </div>
+    <div class="diff-content">${html}</div>
+  `;
+}
+
+window.copyAll = function () {
+  const el = document.querySelector('.diff-content');
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    alert('Copied to clipboard!');
+  });
+};
+</script>
+
+</body>
+</html>
