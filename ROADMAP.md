@@ -359,22 +359,41 @@ Ratkaisu Netlify 10s timeout -ongelmaan: vaihto Claude Sonnet → Claude Haiku 4
 
 **Viikon 1 loppu (22.4 iltana):** 4/5 työkalua valmista (Lesson Plan, Report Comments, Quiz). 5. työkalu Day 5:llä (Worksheet).
 
+**22.4 (Day 5) — Worksheet Generator LIVE:**
+- ✅ Uusi `worksheet.html` — form + Teacher/Student view toggle
+- ✅ Uusi `netlify/functions/generate-worksheet.js` — student-facing handout generaattori
+- ✅ 4 activity-tyyppiä: practice / investigation / revision / homework
+- ✅ 3 pituutta: short (30 min) / standard (45 min) / extended (60+ min)
+- ✅ Student-osio: Learning Outcomes, Key Terms, Worked Example, 6-10 Practice Questions (tilaa kirjoitukselle), Extension Challenge ★
+- ✅ Answer Key — erotettu horisontaali-viivalla, piilotettavissa Student-view:ssa
+- ✅ Teacher Notes: time, differentiation, common misconception, curriculum link spec-codella
+- ✅ Print/Save PDF toimii aktiivisen näkymän mukaan
+- ✅ Freemium: 5 worksheettiä/kk free
+- ✅ Testitulos: GCSE Business profit margins, 7074 merkkiä, kaikki osiot present, 69 sekuntia
+
+**5/5 työkalua live — Viikko 1 tavoite saavutettu 1 päivässä** (piti olla Vk 1 loppuun mennessä).
+
 **[Seuraavat päivät lisätään tähän]**
 
 ---
 
-## 📌 Day 5 suunnitelma (23.4)
+## 📌 Day 6 suunnitelma (23.4)
 
-- **Worksheet Generator** — student-facing handout PDF
-- Input: subject + level + topic + activity type (practice / investigation / revision)
-- Output: student handout (intro, worked examples, 10 practice questions, extension)
-- Answer key separate sivulla
-- Brand-logo alareunassa
+- **Differentiation Helper** — korvaa Diffit kilpailijaksi
+- Input: base-task/resource + tasovaatimukset
+- Output: 3 versiota (scaffold / core / stretch) + SEN-muokkaukset + EAL-muokkaukset
+- Erottaa meidät: UK curriculum-awareness + cognitive load -periaatteet
+
+## 📌 Day 7-8 suunnitelma (24-25.4)
+
+- **Supabase auth** (magic link email)
+- **Stripe freemium** — 5 free/kk per tool, Pro £9/kk unlimited
+- Dashboard: nähdä oma käyttö, downgrade/cancel
 
 ---
 
 *Tämä dokumentti on elävä. Päivitetään joka viikko. Jos joku kohta ei toimi, muutetaan suuntaa — mutta aina vastaten siihen ensimmäiseen kysymykseen: miksi opettaja valitsee tämän ChatGPT:n sijaan.*
 
-**Viimeisin päivitys:** 22.4.2026 (Day 2 + Day 3 + Day 4 complete, 3 työkalua live)
+**Viimeisin päivitys:** 22.4.2026 (Day 1-5 complete, 4 työkalua live — Viikon 1 tavoite saavutettu)
 **Vastuu:** Sakari Laajoki (founder) + Claude (build)
-**Seuraava checkpoint:** 28.4.2026 (Viikko 1 loppu — tavoite 5/5 työkalua)
+**Seuraava checkpoint:** 28.4.2026 (Viikko 1 loppu — tavoite 5/5 työkalua ✅)
