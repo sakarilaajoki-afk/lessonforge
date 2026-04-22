@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz &amp; Exam Builder — LessonForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js" defer></script>
+<style>
+  .quiz-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 900px) { .quiz-layout { grid-template-columns: 1fr; } }
+
+  .quiz-form {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+  }
+  .quiz-form h1 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .quiz-form .subtitle { color: var(--mist); font-size: 13px; margin-bottom: 20px; }
+
+  .checkbox-group {
+    display: grid;
+    gap: 8px;
+  }
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    background: var(--paper);
+    font-weight: 500;
+    font-size: 14px;
+    margin: 0;
+  }
+  .checkbox-group label:has(input:checked) {
+    border-color: var(--ember);
+    background: var(--ember-soft);
+    color: var(--ember);
+  }
+  .checkbox-group input[type="checkbox"] { margin: 0; width: 18px; height: 18px; accent-color: var(--ember); }
+  .checkbox-group small { color: var(--mist); font-weight: 400; margin-left: auto; font-size: 12px; }
+
+  .quiz-output {
+    background: white;
+    border: 1px solid var(--steel);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    min-height: 500px;
+  }
+
+  .quiz-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mist);
+  }
+  .quiz-empty .em { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .quiz-empty h2 { font-family: var(--font-display); font-size: 20px; color: var(--anvil); margin-bottom: 6px; }
+
+  .quiz-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    background: var(--paper);
+    border-radius: var(--radius);
+    border: 1px solid var(--steel);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .quiz-actions .label {
+    font-size: 12px;
+    color: var(--anvil);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .quiz-actions button {
+    background: white;
+    border: 1px solid var(--steel);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--anvil);
+    font-family: inherit;
+  }
+  .quiz-actions button:hover { border-color: var(--ember); color: var(--ember); }
+  .quiz-actions button.active {
+    background: var(--ember);
+    color: white;
+    border-color: var(--ember);
+  }
+  .quiz-actions button.primary {
+    background: var(--ember);
+    color: white;
+    border-color: var(--ember);
+    margin-left: auto;
+  }
+  .quiz-actions button.primary:hover { background: #b33912; }
+
+  /* Rendered quiz styling */
+  .quiz-content h1 { font-family: var(--font-display); font-size: 28px; margin-bottom: 4px; color: var(--ink); }
+  .quiz-content em { color: var(--mist); display: block; font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--steel); padding-bottom: 12px; }
+  .quiz-content h2 { font-family: var(--font-display); font-size: 20px; margin: 24px 0 12px; color: var(--ink); border-left: 3px solid var(--ember); padding-left: 12px; }
+  .quiz-content p { margin-bottom: 10px; line-height: 1.65; }
+  .quiz-content ul, .quiz-content ol { padding-left: 22px; margin-bottom: 12px; }
+  .quiz-content li { margin-bottom: 4px; line-height: 1.6; }
+  .quiz-content strong { color: var(--ink); }
+  .quiz-content hr { border: none; border-top: 1px dashed var(--steel); margin: 20px 0; }
+
+  /* When student view is active, hide everything after second "---" (Mark Scheme onwards) */
+  .student-view .mark-scheme-hidden { display: none !important; }
+
+  @media print {
+    .nav, .quiz-form, .quiz-actions { display: none !important; }
+    .quiz-layout { grid-template-columns: 1fr; padding: 0; }
+    .quiz-output { border: none; padding: 0; }
+    body { background: white; }
+  }
+
+  .error {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+  }
+
+  .field.types-field { margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand-mark" style="color: inherit; text-decoration: none;">
+      <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
+        <defs><linearGradient id="e1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#d84315"/></linearGradient></defs>
+        <rect x="10" y="44" width="44" height="8" rx="1.5" fill="#1a1f36"/>
+        <rect x="16" y="36" width="32" height="8" rx="1" fill="#1a1f36"/>
+        <path d="M 48 36 L 56 32 L 56 40 L 48 44 Z" fill="#1a1f36"/>
+        <path d="M 18 28 L 46 28 L 46 36 L 18 36 Z" fill="#3a3f51"/>
+        <path d="M 32 28 L 32 36" stroke="#1a1f36" stroke-width="1"/>
+        <path d="M 32 22 Q 28 16, 32 8 Q 36 16, 32 22 Z" fill="url(#e1)"/>
+        <circle cx="38" cy="14" r="2" fill="#f97316" opacity="0.6"/>
+        <circle cx="26" cy="18" r="1.5" fill="#f97316" opacity="0.5"/>
+      </svg>
+      <span>LessonForge</span>
+    </a>
+    <div class="nav-links">
+      <a href="app.html">Lesson plans</a>
+      <a href="reports.html">Report comments</a>
+      <a href="index.html#pricing">Pricing</a>
+      <span style="color: var(--mist); font-size: 13px;" id="usage-label">—</span>
+    </div>
+  </div>
+</nav>
+
+<div class="quiz-layout">
+
+  <aside class="quiz-form">
+    <h1>📝 Quiz Builder</h1>
+    <p class="subtitle">Generate a print-ready quiz with model answers and board-style mark scheme.</p>
+
+    <form id="quiz-form">
+      <div class="field">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" placeholder="e.g. Business, Maths, English" required>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="level">Level</label>
+          <select id="level" required>
+            <optgroup label="Primary (UK)">
+              <option>Year 3 (KS2)</option>
+              <option>Year 4 (KS2)</option>
+              <option>Year 5 (KS2)</option>
+              <option>Year 6 (KS2)</option>
+            </optgroup>
+            <optgroup label="Secondary (UK)">
+              <option>Year 7 (KS3)</option>
+              <option>Year 8 (KS3)</option>
+              <option>Year 9 (KS3)</option>
+              <option>Year 10 (GCSE)</option>
+              <option>Year 11 (GCSE)</option>
+              <option selected>Year 12 (A-Level/BTEC)</option>
+              <option>Year 13 (A-Level/BTEC)</option>
+            </optgroup>
+            <optgroup label="Secondary (AU)">
+              <option>Year 11 (HSC/VCE)</option>
+              <option>Year 12 (HSC/VCE)</option>
+            </optgroup>
+            <optgroup label="University">
+              <option>Foundation / Access</option>
+              <option>Undergraduate Y1</option>
+              <option>Undergraduate Y2</option>
+              <option>Undergraduate Y3</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="count">Questions</label>
+          <select id="count" required>
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="topic">Topic / learning focus</label>
+        <textarea id="topic" rows="3" placeholder="e.g. Price elasticity of demand — calculation and interpretation" required></textarea>
+      </div>
+
+      <div class="field">
+        <label for="exam-board">Exam board / curriculum (optional)</label>
+        <select id="exam-board">
+          <option value="">— Not specified —</option>
+          <option>AQA</option>
+          <option>Pearson Edexcel</option>
+          <option>OCR</option>
+          <option>WJEC</option>
+          <option>CCEA</option>
+          <option>Scottish CfE</option>
+          <option>ACARA (AU national)</option>
+          <option>NSW Syllabus (HSC)</option>
+          <option>VIC VCE</option>
+          <option>IB MYP / DP</option>
+          <option>IGCSE / Cambridge</option>
+        </select>
+      </div>
+
+      <div class="field types-field">
+        <label>Question types (pick one or more)</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="qtype" value="mcq" checked> MCQ (multiple choice)<small>1 mark each</small></label>
+          <label><input type="checkbox" name="qtype" value="short" checked> Short answer<small>2–10 marks</small></label>
+          <label><input type="checkbox" name="qtype" value="essay"> Essay (9/12/16 marker)<small>longer</small></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="difficulty">Difficulty</label>
+        <select id="difficulty">
+          <option value="standard" selected>Standard (on-level)</option>
+          <option value="challenging">Challenging (stretch)</option>
+          <option value="exam-stretch">Exam-stretch (top grades)</option>
+        </select>
+      </div>
+
+      <button type="submit" class="generate-btn" id="quiz-btn">
+        ⚒️ Forge the quiz
+      </button>
+      <p style="font-size: 12px; color: var(--mist); margin-top: 12px; text-align: center;">
+        Takes 20–30 seconds.
+      </p>
+    </form>
+  </aside>
+
+  <main class="quiz-output" id="quiz-output">
+    <div class="quiz-empty">
+      <div class="em">📝</div>
+      <h2>Your quiz will appear here</h2>
+      <p>Fill in the form — we'll give you questions, model answers, and a mark scheme.</p>
+    </div>
+  </main>
+
+</div>
+
+<script>
+// ============================================================
+// Usage tracking
+// ============================================================
+const USAGE_KEY = 'lessonforge-quiz-usage-v1';
+const FREE_LIMIT = 5;
+
+function getUsage() {
+  const stored = localStorage.getItem(USAGE_KEY);
+  const month = new Date().toISOString().slice(0, 7);
+  if (!stored) return { month, count: 0 };
+  const parsed = JSON.parse(stored);
+  if (parsed.month !== month) return { month, count: 0 };
+  return parsed;
+}
+function bumpUsage() {
+  const u = getUsage();
+  u.count++;
+  localStorage.setItem(USAGE_KEY, JSON.stringify(u));
+  renderUsage();
+}
+function renderUsage() {
+  const u = getUsage();
+  const remaining = Math.max(0, FREE_LIMIT - u.count);
+  const el = document.getElementById('usage-label');
+  if (el) el.textContent = `${remaining} of ${FREE_LIMIT} free this month`;
+}
+renderUsage();
+
+// ============================================================
+// Form submission
+// ============================================================
+const form = document.getElementById('quiz-form');
+const output = document.getElementById('quiz-output');
+const btn = document.getElementById('quiz-btn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const u = getUsage();
+  if (u.count >= FREE_LIMIT) {
+    output.innerHTML = `
+      <div class="quiz-empty">
+        <div class="em">🔒</div>
+        <h2>Free limit reached</h2>
+        <p style="max-width: 360px; margin: 12px auto;">You've used all ${FREE_LIMIT} free quizzes this month. Upgrade to Pro for unlimited.</p>
+        <a href="index.html#pricing" class="btn btn-primary" style="display: inline-block; margin-top: 16px;">See Pro</a>
+      </div>`;
+    return;
+  }
+
+  const types = Array.from(document.querySelectorAll('input[name="qtype"]:checked')).map(i => i.value);
+  if (types.length === 0) {
+    alert('Pick at least one question type.');
+    return;
+  }
+
+  const payload = {
+    subject: document.getElementById('subject').value.trim(),
+    level: document.getElementById('level').value,
+    topic: document.getElementById('topic').value.trim(),
+    examBoard: document.getElementById('exam-board').value,
+    questionTypes: types,
+    questionCount: parseInt(document.getElementById('count').value, 10),
+    difficulty: document.getElementById('difficulty').value,
+  };
+
+  btn.disabled = true;
+  btn.textContent = '⚒️ Forging...';
+
+  output.innerHTML = `
+    <div class="quiz-empty">
+      <div class="em" style="animation: spin 1s linear infinite;">⚒️</div>
+      <h2>Hammering it out...</h2>
+      <p style="color: var(--mist); margin-top: 8px;">This takes 20–30 seconds.</p>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+  `;
+
+  try {
+    const res = await fetch('/.netlify/functions/generate-quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error(t);
+    }
+    const result = await res.json();
+    renderQuiz(result.quiz);
+    bumpUsage();
+  } catch (err) {
+    output.innerHTML = `
+      <div class="quiz-empty">
+        <div class="em">⚠️</div>
+        <h2>Something went wrong</h2>
+        <div class="error" style="margin-top: 12px; max-width: 500px; margin-left: auto; margin-right: auto;">${err.message}</div>
+      </div>`;
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚒️ Forge the quiz';
+  }
+});
+
+function renderQuiz(raw) {
+  if (!raw) {
+    output.innerHTML = `<div class="quiz-empty"><h2>Empty response</h2></div>`;
+    return;
+  }
+
+  // Mark the Mark Scheme section and everything after it with a CSS class so we can
+  // hide it in student view. Strategy: find the first occurrence of "## Mark Scheme"
+  // and wrap everything from there in a div.
+  const html = window.marked.parse(raw);
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const all = Array.from(doc.body.children);
+  const msIdx = all.findIndex(el => el.tagName === 'H2' && /mark scheme/i.test(el.textContent));
+
+  let teacherHtml = html;
+  if (msIdx > -1) {
+    const teacherPortion = all.slice(0, msIdx).map(el => el.outerHTML).join('');
+    const markSchemePortion = all.slice(msIdx).map(el => el.outerHTML).join('');
+    teacherHtml = `<div class="quiz-content">${teacherPortion}<div class="mark-scheme-hidden">${markSchemePortion}</div></div>`;
+  } else {
+    teacherHtml = `<div class="quiz-content">${html}</div>`;
+  }
+
+  output.innerHTML = `
+    <div class="quiz-actions">
+      <span class="label">View:</span>
+      <button class="active" onclick="setView('teacher', this)">👨‍🏫 Teacher (with answers)</button>
+      <button onclick="setView('student', this)">🎓 Student (no answers)</button>
+      <button class="primary" onclick="window.print()">🖨️ Print / Save PDF</button>
+    </div>
+    ${teacherHtml}
+  `;
+  window._currentView = 'teacher';
+}
+
+window.setView = function (view, btn) {
+  const content = document.querySelector('.quiz-content');
+  document.querySelectorAll('.quiz-actions button').forEach(b => { if (!b.classList.contains('primary')) b.classList.remove('active'); });
+  btn.classList.add('active');
+  if (view === 'student') {
+    content.classList.add('student-view');
+  } else {
+    content.classList.remove('student-view');
+  }
+  window._currentView = view;
+};
+</script>
+
+</body>
+</html>
