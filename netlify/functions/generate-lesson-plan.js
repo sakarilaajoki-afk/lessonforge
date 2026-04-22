@@ -59,8 +59,8 @@ exports.handler = async (event) => {
         // Quality is still strong for lesson planning; we can A/B test Sonnet later
         // if we upgrade to Netlify Pro (26s timeout) or move to background functions.
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4000,
-        temperature: 0.7,
+        max_tokens: 2500,
+        temperature: 0.5,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
       }),
@@ -146,12 +146,11 @@ const SYSTEM_PROMPT = `You are LessonForge, an AI lesson-planning assistant for 
 3–4 objectives, each starting with a Bloom's verb (Explain, Analyse, Evaluate, Apply, Calculate, Compare). Map each to an AO level at the end in brackets, e.g. "(AO1)", "(AO2)", "(AO3)".
 
 ## Case Study
-A fully-written case study the teacher can hand out. 200–300 words. Must include:
-- A fictional but realistic UK or AU company (invent a plausible name)
-- Specific numbers (revenue, costs, prices, unit sales, market share)
-- A clear problem or decision point
-- Enough detail that students can analyse it for 15+ minutes
-Style it like a real case: company name in bold, then narrative.
+A ready-to-use case study for the Main Task. 120–180 words. Must include:
+- Fictional but realistic UK/AU company (invent the name)
+- 3–4 specific numbers (revenue, price, unit sales, cost)
+- A clear decision point for students to analyse
+Company name **bold** at start, then narrative. Tight — no filler.
 
 ## Starter (5–10 min)
 One concrete activity. What students do, what teacher does, resources.
@@ -165,20 +164,15 @@ One concrete activity. Check understanding.
 ## Homework / Extension
 Realistic-length homework task. Link to the exam spec if possible.
 
-## Sample Exam Question (AQA/Pearson style)
-Write ONE exam-style question for the specified board. Format:
-- Question number and marks (e.g. "0 9 Evaluate... [9 marks]" for AQA)
-- The question itself
-- Then a **Mark Scheme** below with:
-  - AO1 band descriptors (Knowledge) — what a 1-mark, mid-band, and top-band answer looks like
-  - AO2 (Application to the case)
-  - AO3 (Analysis)
-  - AO4 (Evaluation with justified judgement) — only if the command verb requires it
-- 2–3 "indicative content" bullet points (what answer might include)
-Match the exact house style of the specified board (AQA uses "0 1 0 1" numbering; Pearson uses "Q1", "Q2" etc.).
+## Sample Exam Question (board-specific style)
+ONE exam-style question, matching the specified board's house style. Include:
+- **Question:** with marks in brackets
+- **Mark Scheme:** by AO level — max 2 bullet points per AO (AO1/AO2/AO3/AO4 as the command verb requires). Each bullet = what earns marks.
+- **Indicative content:** 2–3 bullets of expected answer points.
+Be tight — this is a guide, not a full examiner report.
 
-## Slide Outline (6–8 slides)
-For each slide: title + 3 bullet points. Numbered list. These should map directly to Main Task timing. Teacher will build them in Google Slides / PowerPoint.
+## Slide Outline (6 slides)
+Numbered list. Each slide: **Title** — 2 bullets. Maps to Main Task timing.
 
 ## Differentiation
 - **Scaffold** (support): specific adjustment
@@ -201,7 +195,7 @@ If exam board specified, cite relevant spec sections precisely (e.g. "AQA 7132 3
 
 ---
 
-**Target length:** 900–1400 words total. The Case Study and Mark Scheme are worth the extra length — they save the teacher 30–60 minutes of prep each. Quality over brevity, but no waffle.`;
+**Target length:** 700–1100 words total. Every section must be useful — no filler. The Case Study and Mark Scheme save the teacher 30–60 min of prep each; that justifies their length.`;
 
 // ============================================================
 // Build the user prompt from form data
