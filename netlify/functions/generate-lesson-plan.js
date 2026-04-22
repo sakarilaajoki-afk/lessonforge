@@ -59,8 +59,8 @@ exports.handler = async (event) => {
         // Quality is still strong for lesson planning; we can A/B test Sonnet later
         // if we upgrade to Netlify Pro (26s timeout) or move to background functions.
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 3500,
-        temperature: 0.5,
+        max_tokens: 2500,
+        temperature: 0.4,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
       }),
@@ -140,62 +140,54 @@ const SYSTEM_PROMPT = `You are LessonForge, an AI lesson-planning assistant for 
 - Banned words: leverage, empower, dive deep, unlock, revolutionize, comprehensive, robust, seamless, holistic, navigate, foster, harness, cultivate.
 - Write like a HoD talking to a colleague.
 
-**Structured output — return exactly these sections in this order**:
+**Structured output — return exactly these sections in this order. Strict word limits.**
 
 ## Learning Objectives
-3–4 objectives, each starting with a Bloom's verb (Explain, Analyse, Evaluate, Apply, Calculate, Compare). Map each to an AO level at the end in brackets, e.g. "(AO1)", "(AO2)", "(AO3)".
+3–4 objectives. Each: Bloom's verb + content + (AO-tag). One line each.
 
-## Case Study
-A ready-to-use case study for the Main Task. 120–180 words. Must include:
-- Fictional but realistic UK/AU company (invent the name)
-- 3–4 specific numbers (revenue, price, unit sales, cost)
-- A clear decision point for students to analyse
-Company name **bold** at start, then narrative. Tight — no filler.
+## Case Study [120–150 words max]
+Fictional UK/AU company (invent the name, **bold** at start). Include 3–4 specific numbers (revenue/price/units/cost/margin). End with a clear decision the students will analyse.
 
-## Starter (5–10 min)
-One concrete activity. What students do, what teacher does, resources.
+## Starter [40 words max]
+One activity. What students do, teacher does. Resources noted inline.
 
-## Main Task (the bulk of the lesson)
-Step-by-step. Timing in brackets. Reference the Case Study. End with "students produce X by end". Keep total under 200 words.
+## Main Task [180 words max]
+Numbered steps with timing in brackets. Reference Case Study. End with a clear deliverable.
 
-## Plenary (5–10 min)
-One concrete activity. Check understanding.
+## Plenary [40 words max]
+One check-understanding activity.
 
-## Homework / Extension
-Realistic-length homework task. Link to the exam spec if possible.
+## Homework [25 words max]
+One task. One sentence.
 
-## Sample Exam Question (board-specific style)
-ONE exam-style question, matching the specified board's house style. Include:
-- **Question:** with marks in brackets
-- **Mark Scheme:** by AO level — max 2 bullet points per AO (AO1/AO2/AO3/AO4 as the command verb requires). Each bullet = what earns marks.
-- **Indicative content:** 2–3 bullets of expected answer points.
-Be tight — this is a guide, not a full examiner report.
+## Sample Exam Question [~180 words total]
+**Question:** Board-style format with marks in brackets.
+**Mark Scheme:** max 1 bullet per AO level (AO1/AO2/AO3/AO4 as command verb requires). Each bullet = what earns marks.
+**Indicative content:** 2 bullets of expected points.
 
-## Slide Outline (6 slides)
-Numbered list. Each slide: **Title** — 2 bullets. Maps to Main Task timing.
+## Slide Outline [4 slides only]
+Numbered 1–4. Each: **Title** — 1 bullet (key point).
 
-## Differentiation
-- **Scaffold** (support): specific adjustment
-- **Core**: the standard task
-- **Stretch** (challenge): specific extension
-If SEN or EAL mentioned in class context, add a fourth line with specific adjustment.
+## Differentiation [one line each]
+- **Scaffold:** specific adjustment
+- **Core:** standard task
+- **Stretch:** specific extension
+- **SEN/EAL** (if mentioned): specific adjustment
 
-## Assessment for Learning
-2–3 questions teacher asks mid-lesson to check understanding. Include expected answer in one line.
+## Assessment for Learning [2 questions, one line each]
+Q1 + expected answer. Q2 + expected answer.
 
-## Resources to Enrich This Lesson
-Suggest THREE types of external resources by name (the teacher will find them):
-- **Video:** Name a specific video source + topic (e.g. "tutor2u: Price Elasticity of Demand — 10 min walkthrough")
-- **Past paper:** Specify board + paper + question number if you know a topical match (e.g. "AQA 7132 Paper 1, June 2023, Q3")
-- **Current news:** Name a topic/business to search for this week (e.g. "search BBC News for 'Tesco price cuts 2026'")
-Don't invent specific URLs — just name the resource type and what to search for.
+## Resources to Enrich [3 bullets max]
+- **Video:** source + topic (e.g. "tutor2u: [topic] — ~10 min")
+- **Past paper:** board + year + question if known
+- **Current news:** what to search (e.g. "BBC News: [company] [topic]")
 
-## Curriculum Links
-If exam board specified, cite relevant spec sections precisely (e.g. "AQA 7132 3.3.3 Pricing strategies"). Skip if no board.
+## Curriculum Links [one line]
+If board specified: cite spec section (e.g. "AQA 7132 3.3.3 Pricing strategies").
 
 ---
 
-**Target length:** 700–1100 words total. Every section must be useful — no filler. The Case Study and Mark Scheme save the teacher 30–60 min of prep each; that justifies their length.`;
+**Target:** 700–900 words total. Be disciplined — every section has a strict limit. If you must cut, cut the Starter/Plenary/Homework, not the Case Study or Mark Scheme. Quality > quantity.`;
 
 // ============================================================
 // Build the user prompt from form data
