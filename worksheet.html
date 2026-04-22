@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quiz &amp; Exam Builder — LessonForge</title>
+<title>Worksheet Generator — LessonForge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js" defer></script>
 <style>
-  .quiz-layout {
+  .ws-layout {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 24px 80px;
@@ -18,9 +18,9 @@
     grid-template-columns: 380px 1fr;
     gap: 28px;
   }
-  @media (max-width: 900px) { .quiz-layout { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .ws-layout { grid-template-columns: 1fr; } }
 
-  .quiz-form {
+  .ws-form {
     background: white;
     border: 1px solid var(--steel);
     border-radius: var(--radius-lg);
@@ -29,20 +29,20 @@
     position: sticky;
     top: 80px;
   }
-  .quiz-form h1 {
+  .ws-form h1 {
     font-family: var(--font-display);
     font-size: 22px;
     margin-bottom: 4px;
   }
-  .quiz-form .subtitle { color: var(--mist); font-size: 13px; margin-bottom: 20px; }
+  .ws-form .subtitle { color: var(--mist); font-size: 13px; margin-bottom: 20px; }
 
-  .checkbox-group {
+  .radio-group {
     display: grid;
     gap: 8px;
   }
-  .checkbox-group label {
+  .radio-group label {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     padding: 10px 14px;
     border: 1px solid var(--steel);
@@ -53,15 +53,17 @@
     font-size: 14px;
     margin: 0;
   }
-  .checkbox-group label:has(input:checked) {
+  .radio-group label:has(input:checked) {
     border-color: var(--ember);
     background: var(--ember-soft);
-    color: var(--ember);
   }
-  .checkbox-group input[type="checkbox"] { margin: 0; width: 18px; height: 18px; accent-color: var(--ember); }
-  .checkbox-group small { color: var(--mist); font-weight: 400; margin-left: auto; font-size: 12px; }
+  .radio-group input[type="radio"] { margin: 2px 0 0 0; accent-color: var(--ember); }
+  .radio-group .label-body { flex: 1; }
+  .radio-group .label-body .title { font-weight: 600; color: var(--ink); }
+  .radio-group .label-body .desc { font-size: 12px; color: var(--mist); margin-top: 2px; font-weight: 400; }
+  .radio-group label:has(input:checked) .label-body .title { color: var(--ember); }
 
-  .quiz-output {
+  .ws-output {
     background: white;
     border: 1px solid var(--steel);
     border-radius: var(--radius-lg);
@@ -69,15 +71,15 @@
     min-height: 500px;
   }
 
-  .quiz-empty {
+  .ws-empty {
     text-align: center;
     padding: 60px 20px;
     color: var(--mist);
   }
-  .quiz-empty .em { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
-  .quiz-empty h2 { font-family: var(--font-display); font-size: 20px; color: var(--anvil); margin-bottom: 6px; }
+  .ws-empty .em { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .ws-empty h2 { font-family: var(--font-display); font-size: 20px; color: var(--anvil); margin-bottom: 6px; }
 
-  .quiz-actions {
+  .ws-actions {
     display: flex;
     gap: 10px;
     padding: 14px 20px;
@@ -88,13 +90,13 @@
     flex-wrap: wrap;
     align-items: center;
   }
-  .quiz-actions .label {
+  .ws-actions .label {
     font-size: 12px;
     color: var(--anvil);
     font-weight: 600;
     margin-right: 4px;
   }
-  .quiz-actions button {
+  .ws-actions button {
     background: white;
     border: 1px solid var(--steel);
     padding: 8px 14px;
@@ -105,38 +107,37 @@
     color: var(--anvil);
     font-family: inherit;
   }
-  .quiz-actions button:hover { border-color: var(--ember); color: var(--ember); }
-  .quiz-actions button.active {
-    background: var(--ember);
-    color: white;
-    border-color: var(--ember);
-  }
-  .quiz-actions button.primary {
+  .ws-actions button:hover { border-color: var(--ember); color: var(--ember); }
+  .ws-actions button.active { background: var(--ember); color: white; border-color: var(--ember); }
+  .ws-actions button.primary {
     background: var(--ember);
     color: white;
     border-color: var(--ember);
     margin-left: auto;
   }
-  .quiz-actions button.primary:hover { background: #b33912; }
+  .ws-actions button.primary:hover { background: #b33912; }
 
-  /* Rendered quiz styling */
-  .quiz-content h1 { font-family: var(--font-display); font-size: 28px; margin-bottom: 4px; color: var(--ink); }
-  .quiz-content em { color: var(--mist); display: block; font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--steel); padding-bottom: 12px; }
-  .quiz-content h2 { font-family: var(--font-display); font-size: 20px; margin: 24px 0 12px; color: var(--ink); border-left: 3px solid var(--ember); padding-left: 12px; }
-  .quiz-content p { margin-bottom: 10px; line-height: 1.65; }
-  .quiz-content ul, .quiz-content ol { padding-left: 22px; margin-bottom: 12px; }
-  .quiz-content li { margin-bottom: 4px; line-height: 1.6; }
-  .quiz-content strong { color: var(--ink); }
-  .quiz-content hr { border: none; border-top: 1px dashed var(--steel); margin: 20px 0; }
+  /* Rendered worksheet styling */
+  .ws-content h1 { font-family: var(--font-display); font-size: 26px; margin-bottom: 6px; color: var(--ink); }
+  .ws-content h2 { font-family: var(--font-display); font-size: 19px; margin: 22px 0 10px; color: var(--ink); border-left: 3px solid var(--ember); padding-left: 12px; }
+  .ws-content h3 { font-family: var(--font-display); font-size: 15px; margin: 18px 0 6px; color: var(--anvil); }
+  .ws-content p { margin-bottom: 10px; line-height: 1.65; }
+  .ws-content ul, .ws-content ol { padding-left: 22px; margin-bottom: 12px; }
+  .ws-content li { margin-bottom: 6px; line-height: 1.6; }
+  .ws-content strong { color: var(--ink); }
+  .ws-content em { color: var(--mist); }
+  .ws-content hr { border: none; border-top: 1px dashed var(--steel); margin: 20px 0; }
+  .ws-content blockquote { border-left: 3px solid var(--ember); padding: 8px 14px; background: var(--ember-soft); margin: 12px 0; border-radius: 0 6px 6px 0; }
 
-  /* When student view is active, hide everything after second "---" (Mark Scheme onwards) */
-  .student-view .mark-scheme-hidden { display: none !important; }
+  /* When student view is active, hide answer-key-onwards */
+  .student-view .answer-key-hidden { display: none !important; }
 
   @media print {
-    .nav, .quiz-form, .quiz-actions { display: none !important; }
-    .quiz-layout { grid-template-columns: 1fr; padding: 0; }
-    .quiz-output { border: none; padding: 0; }
+    .nav, .ws-form, .ws-actions { display: none !important; }
+    .ws-layout { grid-template-columns: 1fr; padding: 0; }
+    .ws-output { border: none; padding: 0; }
     body { background: white; }
+    .ws-content h2 { page-break-after: avoid; }
   }
 
   .error {
@@ -147,8 +148,6 @@
     border-radius: var(--radius);
     font-size: 14px;
   }
-
-  .field.types-field { margin-bottom: 20px; }
 </style>
 </head>
 <body>
@@ -171,21 +170,21 @@
     </a>
     <div class="nav-links">
       <a href="app.html">Lesson plans</a>
-      <a href="worksheet.html">Worksheet</a>
-      <a href="reports.html">Report comments</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="reports.html">Reports</a>
       <a href="index.html#pricing">Pricing</a>
       <span style="color: var(--mist); font-size: 13px;" id="usage-label">—</span>
     </div>
   </div>
 </nav>
 
-<div class="quiz-layout">
+<div class="ws-layout">
 
-  <aside class="quiz-form">
-    <h1>📝 Quiz Builder</h1>
-    <p class="subtitle">Generate a print-ready quiz with model answers and board-style mark scheme.</p>
+  <aside class="ws-form">
+    <h1>🧩 Worksheet Generator</h1>
+    <p class="subtitle">Print-ready student handout with worked example, questions, and answer key.</p>
 
-    <form id="quiz-form">
+    <form id="ws-form">
       <div class="field">
         <label for="subject">Subject</label>
         <input type="text" id="subject" placeholder="e.g. Business, Maths, English" required>
@@ -214,29 +213,22 @@
               <option>Year 11 (HSC/VCE)</option>
               <option>Year 12 (HSC/VCE)</option>
             </optgroup>
-            <optgroup label="University">
-              <option>Foundation / Access</option>
-              <option>Undergraduate Y1</option>
-              <option>Undergraduate Y2</option>
-              <option>Undergraduate Y3</option>
-            </optgroup>
           </select>
         </div>
 
         <div class="field">
-          <label for="count">Questions</label>
-          <select id="count" required>
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
+          <label for="length">Length</label>
+          <select id="length">
+            <option value="short">30 min (short)</option>
+            <option value="standard" selected>45 min (standard)</option>
+            <option value="extended">60+ min (extended)</option>
           </select>
         </div>
       </div>
 
       <div class="field">
         <label for="topic">Topic / learning focus</label>
-        <textarea id="topic" rows="3" placeholder="e.g. Price elasticity of demand — calculation and interpretation" required></textarea>
+        <textarea id="topic" rows="3" placeholder="e.g. Calculating ratio analysis — gross profit margin, operating margin, current ratio" required></textarea>
       </div>
 
       <div class="field">
@@ -257,26 +249,42 @@
         </select>
       </div>
 
-      <div class="field types-field">
-        <label>Question types (pick one or more)</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" name="qtype" value="mcq" checked> MCQ (multiple choice)<small>1 mark each</small></label>
-          <label><input type="checkbox" name="qtype" value="short" checked> Short answer<small>2–10 marks</small></label>
-          <label><input type="checkbox" name="qtype" value="essay"> Essay (9/12/16 marker)<small>longer</small></label>
+      <div class="field">
+        <label>Activity type</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="activity" value="practice" checked>
+            <span class="label-body">
+              <span class="title">Practice</span>
+              <span class="desc">Consolidate understanding after a taught lesson</span>
+            </span>
+          </label>
+          <label>
+            <input type="radio" name="activity" value="investigation">
+            <span class="label-body">
+              <span class="title">Investigation</span>
+              <span class="desc">Explore a concept via an inquiry task</span>
+            </span>
+          </label>
+          <label>
+            <input type="radio" name="activity" value="revision">
+            <span class="label-body">
+              <span class="title">Revision</span>
+              <span class="desc">Mixed question types for upcoming assessment</span>
+            </span>
+          </label>
+          <label>
+            <input type="radio" name="activity" value="homework">
+            <span class="label-body">
+              <span class="title">Homework</span>
+              <span class="desc">Independent task, no teacher support needed</span>
+            </span>
+          </label>
         </div>
       </div>
 
-      <div class="field">
-        <label for="difficulty">Difficulty</label>
-        <select id="difficulty">
-          <option value="standard" selected>Standard (on-level)</option>
-          <option value="challenging">Challenging (stretch)</option>
-          <option value="exam-stretch">Exam-stretch (top grades)</option>
-        </select>
-      </div>
-
-      <button type="submit" class="generate-btn" id="quiz-btn">
-        ⚒️ Forge the quiz
+      <button type="submit" class="generate-btn" id="ws-btn">
+        ⚒️ Forge the worksheet
       </button>
       <p style="font-size: 12px; color: var(--mist); margin-top: 12px; text-align: center;">
         Takes 20–30 seconds.
@@ -284,11 +292,11 @@
     </form>
   </aside>
 
-  <main class="quiz-output" id="quiz-output">
-    <div class="quiz-empty">
-      <div class="em">📝</div>
-      <h2>Your quiz will appear here</h2>
-      <p>Fill in the form — we'll give you questions, model answers, and a mark scheme.</p>
+  <main class="ws-output" id="ws-output">
+    <div class="ws-empty">
+      <div class="em">🧩</div>
+      <h2>Your worksheet will appear here</h2>
+      <p>Student handout + answer key + teacher notes — all in one.</p>
     </div>
   </main>
 
@@ -298,7 +306,7 @@
 // ============================================================
 // Usage tracking
 // ============================================================
-const USAGE_KEY = 'lessonforge-quiz-usage-v1';
+const USAGE_KEY = 'lessonforge-worksheet-usage-v1';
 const FREE_LIMIT = 5;
 
 function getUsage() {
@@ -326,9 +334,9 @@ renderUsage();
 // ============================================================
 // Form submission
 // ============================================================
-const form = document.getElementById('quiz-form');
-const output = document.getElementById('quiz-output');
-const btn = document.getElementById('quiz-btn');
+const form = document.getElementById('ws-form');
+const output = document.getElementById('ws-output');
+const btn = document.getElementById('ws-btn');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -336,36 +344,30 @@ form.addEventListener('submit', async (e) => {
   const u = getUsage();
   if (u.count >= FREE_LIMIT) {
     output.innerHTML = `
-      <div class="quiz-empty">
+      <div class="ws-empty">
         <div class="em">🔒</div>
         <h2>Free limit reached</h2>
-        <p style="max-width: 360px; margin: 12px auto;">You've used all ${FREE_LIMIT} free quizzes this month. Upgrade to Pro for unlimited.</p>
+        <p style="max-width: 360px; margin: 12px auto;">You've used all ${FREE_LIMIT} free worksheets this month. Upgrade to Pro for unlimited.</p>
         <a href="index.html#pricing" class="btn btn-primary" style="display: inline-block; margin-top: 16px;">See Pro</a>
       </div>`;
     return;
   }
 
-  const types = Array.from(document.querySelectorAll('input[name="qtype"]:checked')).map(i => i.value);
-  if (types.length === 0) {
-    alert('Pick at least one question type.');
-    return;
-  }
-
+  const activity = document.querySelector('input[name="activity"]:checked')?.value;
   const payload = {
     subject: document.getElementById('subject').value.trim(),
     level: document.getElementById('level').value,
     topic: document.getElementById('topic').value.trim(),
     examBoard: document.getElementById('exam-board').value,
-    questionTypes: types,
-    questionCount: parseInt(document.getElementById('count').value, 10),
-    difficulty: document.getElementById('difficulty').value,
+    activityType: activity,
+    length: document.getElementById('length').value,
   };
 
   btn.disabled = true;
   btn.textContent = '⚒️ Forging...';
 
   output.innerHTML = `
-    <div class="quiz-empty">
+    <div class="ws-empty">
       <div class="em" style="animation: spin 1s linear infinite;">⚒️</div>
       <h2>Hammering it out...</h2>
       <p style="color: var(--mist); margin-top: 8px;">This takes 20–30 seconds.</p>
@@ -374,21 +376,18 @@ form.addEventListener('submit', async (e) => {
   `;
 
   try {
-    const res = await fetch('/.netlify/functions/generate-quiz', {
+    const res = await fetch('/.netlify/functions/generate-worksheet', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) {
-      const t = await res.text();
-      throw new Error(t);
-    }
+    if (!res.ok) throw new Error(await res.text());
     const result = await res.json();
-    renderQuiz(result.quiz);
+    renderWorksheet(result.worksheet);
     bumpUsage();
   } catch (err) {
     output.innerHTML = `
-      <div class="quiz-empty">
+      <div class="ws-empty">
         <div class="em">⚠️</div>
         <h2>Something went wrong</h2>
         <div class="error" style="margin-top: 12px; max-width: 500px; margin-left: auto; margin-right: auto;">${err.message}</div>
@@ -396,56 +395,49 @@ form.addEventListener('submit', async (e) => {
     console.error(err);
   } finally {
     btn.disabled = false;
-    btn.textContent = '⚒️ Forge the quiz';
+    btn.textContent = '⚒️ Forge the worksheet';
   }
 });
 
-function renderQuiz(raw) {
+function renderWorksheet(raw) {
   if (!raw) {
-    output.innerHTML = `<div class="quiz-empty"><h2>Empty response</h2></div>`;
+    output.innerHTML = `<div class="ws-empty"><h2>Empty response</h2></div>`;
     return;
   }
 
-  // Mark the Mark Scheme section and everything after it with a CSS class so we can
-  // hide it in student view. Strategy: find the first occurrence of "## Mark Scheme"
-  // and wrap everything from there in a div.
   const html = window.marked.parse(raw);
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
   const all = Array.from(doc.body.children);
-  const msIdx = all.findIndex(el => el.tagName === 'H2' && /mark scheme/i.test(el.textContent));
+  // Find where Answer Key starts (H2 containing "Answer Key")
+  const akIdx = all.findIndex(el => el.tagName === 'H2' && /answer\s*key/i.test(el.textContent));
 
-  let teacherHtml = html;
-  if (msIdx > -1) {
-    const teacherPortion = all.slice(0, msIdx).map(el => el.outerHTML).join('');
-    const markSchemePortion = all.slice(msIdx).map(el => el.outerHTML).join('');
-    teacherHtml = `<div class="quiz-content">${teacherPortion}<div class="mark-scheme-hidden">${markSchemePortion}</div></div>`;
+  let htmlContent;
+  if (akIdx > -1) {
+    const studentPortion = all.slice(0, akIdx).map(el => el.outerHTML).join('');
+    const answerKeyPortion = all.slice(akIdx).map(el => el.outerHTML).join('');
+    htmlContent = `<div class="ws-content">${studentPortion}<div class="answer-key-hidden">${answerKeyPortion}</div></div>`;
   } else {
-    teacherHtml = `<div class="quiz-content">${html}</div>`;
+    htmlContent = `<div class="ws-content">${html}</div>`;
   }
 
   output.innerHTML = `
-    <div class="quiz-actions">
+    <div class="ws-actions">
       <span class="label">View:</span>
-      <button class="active" onclick="setView('teacher', this)">👨‍🏫 Teacher (with answers)</button>
-      <button onclick="setView('student', this)">🎓 Student (no answers)</button>
+      <button class="active" onclick="setView('teacher', this)">👨‍🏫 Teacher (with key)</button>
+      <button onclick="setView('student', this)">🎓 Student (no key)</button>
       <button class="primary" onclick="window.print()">🖨️ Print / Save PDF</button>
     </div>
-    ${teacherHtml}
+    ${htmlContent}
   `;
-  window._currentView = 'teacher';
 }
 
 window.setView = function (view, btn) {
-  const content = document.querySelector('.quiz-content');
-  document.querySelectorAll('.quiz-actions button').forEach(b => { if (!b.classList.contains('primary')) b.classList.remove('active'); });
+  const content = document.querySelector('.ws-content');
+  document.querySelectorAll('.ws-actions button').forEach(b => { if (!b.classList.contains('primary')) b.classList.remove('active'); });
   btn.classList.add('active');
-  if (view === 'student') {
-    content.classList.add('student-view');
-  } else {
-    content.classList.remove('student-view');
-  }
-  window._currentView = view;
+  if (view === 'student') content.classList.add('student-view');
+  else content.classList.remove('student-view');
 };
 </script>
 
